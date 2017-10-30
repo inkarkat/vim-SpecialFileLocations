@@ -34,52 +34,52 @@ let g:loaded_SpecialFileLocations = 1
 call CommandCompleteDirForAction#setup('CEdit', '', {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete',
-\   'FilenameProcessingFunction': function('SpecialFileLocations#CDPath#GlobLookup')
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#CdPath#GlobLookup')
 \})
 call CommandCompleteDirForAction#setup('Csplit', '', {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 call CommandCompleteDirForAction#setup('CSplit', '', {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 call CommandCompleteDirForAction#setup('CDrop', '', {
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 call CommandCompleteDirForAction#setup('CRevert', '', {
 \   'action': 'Revert',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 call CommandCompleteDirForAction#setup('CRead', '', {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 call CommandCompleteDirForAction#setup('CReadFragment', '', {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 call CommandCompleteDirForAction#setup('CSave', '', {
 \   'commandAttributes': '-bang',
 \   'action': 'saveas<bang>',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 call CommandCompleteDirForAction#setup('CWrite', '', {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#CDPath#Complete'
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
 
 ":RootEdit {file}	Edit project {file} ...
