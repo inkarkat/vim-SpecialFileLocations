@@ -12,6 +12,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	16-Nov-2017	Refactoring: Factor out
+"				s:UnscratchWithCommand().
 "	001	30-Oct-2017	file creation from ingocommands.vim
 
 function! s:InsertTimeAndFormat( template, filespec )
@@ -76,6 +78,7 @@ function! SpecialFileLocations#Scratch#Write( scratchFilenameTemplate, scratchDi
 	return 0
     endtry
 endfunction
+
 function! SpecialFileLocations#Scratch#Save( scratchFilenameTemplate, scratchDirspec, bang, filespec )
     let l:bang = a:bang
     if &l:buftype ==# 'nowrite' && &l:readonly && (empty(a:filespec) || ingo#fs#path#Equals(a:filespec, expand('%:p')))
@@ -86,11 +89,14 @@ function! SpecialFileLocations#Scratch#Save( scratchFilenameTemplate, scratchDir
 	let l:bang = '!'
     endif
 
+    return s:UnscratchWithCommand('keepalt saveas' . l:bang, a:scratchFilenameTemplate, a:scratchDirspec, a:filespec)
+endfunction
+function! s:UnscratchWithCommand( command, scratchFilenameTemplate, scratchDirspec, filespec )
     let l:save_bufsettings = 'setlocal ' . ingo#plugin#setting#BooleanToStringValue('modifiable') . ' '  . ingo#plugin#setting#BooleanToStringValue('readonly') . ' buftype=' . &l:buftype . ' bufhidden=' . &l:bufhidden . ' ' . ingo#plugin#setting#BooleanToStringValue('buflisted')
     let l:save_bufname = expand('%')
     setlocal noreadonly buftype= bufhidden= buflisted
     try
-	execute 'keepalt saveas' . l:bang s:ScratchFilespec(a:scratchFilenameTemplate, a:scratchDirspec, expand('%:t'), a:filespec)
+	execute a:command s:ScratchFilespec(a:scratchFilenameTemplate, a:scratchDirspec, expand('%:t'), a:filespec)
 	return 1
     catch /^Vim\%((\a\+)\)\=:/
 	" Restore scratch buffer name and scratch settings.
