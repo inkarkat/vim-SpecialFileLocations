@@ -1,0 +1,278 @@
+*SpecialFileLocations.txt*	Various ways to access files from special locations.
+
+		   SPECIAL FILE LOCATIONS    by Ingo Karkat
+						    *SpecialFileLocations.vim*
+description			|SpecialFileLocations-description|
+usage				|SpecialFileLocations-usage|
+installation			|SpecialFileLocations-installation|
+configuration			|SpecialFileLocations-configuration|
+integration			|SpecialFileLocations-integration|
+limitations			|SpecialFileLocations-limitations|
+known problems			|SpecialFileLocations-known-problems|
+todo				|SpecialFileLocations-todo|
+history				|SpecialFileLocations-history|
+
+==============================================================================
+DESCRIPTION				    *SpecialFileLocations-description*
+
+This plugin ...
+
+HOW IT WORKS								     *
+
+SOURCE									     *
+(Original Vim tip, Stack Overflow answer, ...)
+
+SEE ALSO								     *
+(Plugins offering complementary functionality, or plugins using this library.)
+
+RELATED WORKS								     *
+(Alternatives from other authors, other approaches, references not used here.)
+
+==============================================================================
+USAGE						  *SpecialFileLocations-usage*
+			      *:CEdit* *:Csplit* *:CSplit* *:CDrop* *:CRevert*
+:CEdit {file}		Edit {file} ...
+:Csplit {file}		Edit {file} in a split (above) buffer...
+:CSplit {file}		Edit {file} in a split (below) buffer...
+:CDrop {file}		Drop {file} ...
+:CRevert {file}		Revert the current buffer to the contents of {file} ...
+				  *:CRead* *:CReadFragment* *:CSave* *:CWrite*
+:[line]CRead {file}	Read {file} ...
+			... from one of the 'cdpath' directories.
+:[line]CReadFragment {file}
+			:CRead and insert fragment formatting around the read
+			contents.
+:CSave[!] [{file}]
+:[range]CWrite[!] [{file}]
+
+
+	       *:RootEdit* *:Rootsplit* *:RootSplit* *:RootDrop* *:RootRevert*
+:RootEdit {file}	Edit project {file} ...
+:Rootsplit {file}	Edit project {file} in a split (above) buffer...
+:RootSplit {file}	Edit project {file} in a split (below) buffer...
+:RootDrop {file}	Drop project {file} ...
+:RootRevert {file}	Revert the current buffer to the contents of {file} ...
+		      *:RootRead* *:RootReadFragment* *:RootSave* *:RootWrite*
+:[line]RootRead {file}	Read project {file} ...
+			... from the project root or one of its
+			subdirectories.
+:[line]RootReadFragment {file}
+			:RootRead and insert fragment formatting around the
+			read contents.
+:RootSave[!] [{file}]
+:[range]RootWrite[!] [{file}]
+			Persist buffer to the project root or one of its
+			subdirectories.
+
+
+	       *:TempEdit* *:Tempsplit* *:TempSplit* *:TempDrop* *:TempRevert*
+:TempEdit {file}	Edit {file} ...
+:Tempsplit {file}	Edit {file} in a split (above) buffer...
+:TempSplit {file}	Edit {file} in a split (below) buffer...
+:TempDrop {file}	Drop {file} ...
+:TempRevert {file}	Revert the current buffer to the contents of {file} ...
+      *:TempRead* *:TempReadFragment* *:TempReadSnip* *:TempSave* *:TempWrite*
+:[line]TempRead {file}	Read {file} ...
+			... from the temp directory or one of its
+			subdirectories.
+:[line]TempReadFragment {file}
+			:TempRead and insert fragment formatting around the
+			read contents.
+:[line]TempReadSnip {file}
+			:TempRead and insert snip formatting around the read
+			contents.
+:TempSave[!] [{file}]
+:[range]TempWrite[!] [{file}]
+			Persist buffer to the temp directory or one of its
+			subdirectories.
+
+
+*:ScratchEdit* *:Scratchsplit* *:ScratchSplit* *:ScratchDrop* *:ScratchRevert*
+:ScratchEdit {file}	Edit {file} from the default g:scratchDirspec.
+:Scratchsplit {file}	Edit {file} in a split (above) buffer.
+:ScratchSplit {file}	Edit {file} in a split (below) buffer.
+:ScratchDrop {file}	Drop {file} from the default g:scratchDirspec.
+:ScratchRevert {file}	Revert the current buffer to the contents of {file}
+			from the default g:scratchDirspec.
+		    *:ScratchRead*   *:ScratchReadFragment* *:ScratchReadSnip*
+:[line]ScratchRead {file}
+			Read {file} from the default g:scratchDirspec.
+:[line]ScratchReadFragment {file}
+			:ScratchRead and insert fragment formatting around the
+			read contents.
+:[line]ScratchReadSnip {file}
+			:ScratchRead and insert snip formatting around the
+			read contents.
+			       *:ScratchSource* *:ScratchNew* *:ScratchCreate*
+:ScratchSource {file}	Source {file} from the default g:scratchDirspec.
+:[N]ScratchNew [{dir}|{filename} |{filespec}]
+			Create a |:new| buffer in the default g:scratchDirspec,
+			or passed {dir}, or passed {filename} (in
+			g:scratchDirspec), or passed {filespec}. Any changes
+			won't be persisted and be automatically discarded
+			unless |:ScratchWrite| is used.
+:[N]ScratchCreate [{dir}|{filename} |{filespec}]
+			Create a |:new| buffer in the default g:scratchDirspec,
+			or passed {dir}, or passed {filename} (in
+			g:scratchDirspec), or passed {filespec}. This creates
+			a normal buffer where changes have to be persisted
+			with |:w| or discarded with |:bd|!.
+						*:ScratchSave* *:ScratchWrite*
+:ScratchSave[!]  [{dir}|{filename} |{filespec}]
+:[range]ScratchWrite[!] [{dir}|{filename} |{filespec}]
+			Persist a (scratch, or any) buffer to the default
+			g:scratchDirspec, or passed {dir} (with the buffer's
+			filename), or passed {filename} (in g:scratchDirspec),
+			or passed {filespec} (if possible, inside
+			g:scratchDirspec).
+			:ScratchSave converts the scratch buffer to a "normal"
+			buffer, which can subsequently be saved via :w.
+			With :ScratchWrite, the scratch buffer keeps its
+			"scratchiness", and can be updated, toggled, ... with
+			the usual commands. Subsequent saves must be done with
+			:ScratchWrite, too.
+								  *:ScratchIt*
+:ScratchIt		Turn the current buffer into a scratch buffer; that
+			means any edits need not be persisted when closing the
+			buffer / Vim. :ScratchSave will undo this and persist
+			the buffer.
+:ScratchIt {cmd}	Execute {cmd} and turn the current buffer into a
+			scratch buffer. Useful to :PrettyPrint a buffer and
+			then leave it alone.
+
+
+	  *:InboxEdit* *:Inboxsplit* *:InboxSplit* *:InboxDrop* *:InboxRevert*
+:InboxEdit {file}	Edit {file} from the default g:inboxDirspec.
+:Inboxsplit {file}	Edit {file} in a split (above) buffer.
+:InboxSplit {file}	Edit {file} in a split (below) buffer.
+:InboxDrop {file}	Drop {file} from the default g:inboxDirspec.
+:InboxRevert {file}	Revert the current buffer to the contents of {file}
+			from the default g:inboxDirspec.
+				       *:InboxRead* *:InboxSource* *:InboxNew*
+:[line]InboxRead {file}
+			Read {file} from the default g:inboxDirspec.
+:InboxSource {file}	Source {file} from the default g:inboxDirspec.
+:[N]InboxNew [{dir}|{filename} |{filespec}]
+			Create a |:new| buffer in the default g:inboxDirspec,
+			or passed {dir}, or passed {filename} (in
+			g:inboxDirspec), or passed {filespec}.
+						    *:InboxSave* *:InboxWrite*
+:InboxSave[!]  [{dir}|{filename} |{filespec}]
+:[range]InboxWrite[!] [{dir}|{filename} |{filespec}]
+			Persist a (inbox, or any) buffer to the default
+			g:inboxDirspec, or passed {dir} (with the buffer's
+			filename), or passed {filename} (in g:inboxDirspec),
+			or passed {filespec} (if possible, inside
+			g:inboxDirspec).
+			:InboxSave converts a scratch buffer to a "normal"
+			buffer, which can subsequently be saved via :w.
+			With :InboxWrite, the buffer keeps any potential
+			"scratchiness", and can be updated, toggled, ... with
+			the usual commands. Subsequent saves must be done with
+			:InboxWrite, too.
+
+
+						  *:Logbook* *:LogbookInstall*
+:Logbook [{logbook}]	Open a chronological logbook file (ft=logbook) to read
+			or append an entry.
+:LogbookInstall [{hostname}]
+			Open the chronological installation logbook
+			(ft=logbook) for the passed or current host.
+
+
+				      *:Vim* *:Pack* *:Packfile* *:VimRuntime*
+:Vim {vimfile}|{SID}	Quickly edit a ~/.vim/** file, .vimrc or .gvimrc, or
+			the script having {SID}.
+:Pack {package}/{vimfile}
+			Quickly edit a Vimscript from a package
+			(~/.vim/pack/*/start/**).
+:Packfile {vimfile}	Quickly edit a Vimscript from any package
+			(~/.vim/pack/**).
+:VimRuntime {vimfile}	Quickly edit a $VIMRUNTIME/** file.
+			Persist buffer into one of the 'cdpath' directories.
+
+==============================================================================
+INSTALLATION				   *SpecialFileLocations-installation*
+
+The code is hosted in a Git repo at
+    https://github.com/inkarkat/vim-SpecialFileLocations
+You can use your favorite plugin manager, or "git clone" into a directory used
+for Vim |packages|. Stable releases are on the "master" branch, the latest
+unstable snapshot on "develop".
+
+This script is also packaged as a |vimball|. If you have the "gunzip"
+decompressor in your PATH, simply edit the *.vmb.gz package in Vim; otherwise,
+decompress the archive first, e.g. using WinZip. Inside Vim, install by
+sourcing the vimball or via the |:UseVimball| command. >
+    vim SpecialFileLocations*.vmb.gz
+    :so %
+To uninstall, use the |:RmVimball| command.
+
+DEPENDENCIES				   *SpecialFileLocations-dependencies*
+
+- Requires Vim 7.0 or higher.
+
+==============================================================================
+CONFIGURATION				  *SpecialFileLocations-configuration*
+
+For a permanent configuration, put the following commands into your |vimrc|:
+							    *g:scratchDirspec*
+The directory location for scratch files.
+						   *g:scratchFilenameTemplate*
+Template for scratch filenames. It consists of a Dictionary with these keys: >
+    let g:scratchFilenameTemplate = {
+    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
+    \   'named': '%%s',
+    \   'given': '%%s',
+    \}
+The "unnamed" entry is taken for unnamed buffers, the "named" one for buffers
+that already have a name, the "given" for when a name is supplied to the
+:Scratch... command. Each is first passed to |strftime()|; the result then to
+|printf()|.
+
+							      *g:inboxDirspec*
+The directory location for inbox files.
+						     *g:inboxFilenameTemplate*
+Template for inbox filenames. See |g:scratchFilenameTemplate| for details.
+
+							    *g:logbookDirspec*
+The directory location for logbooks.
+						    *g:logbookDefaultFilename*
+The default logbook when no arguments are supplied to |:Logbook|.
+
+==============================================================================
+INTEGRATION				    *SpecialFileLocations-integration*
+
+==============================================================================
+LIMITATIONS				    *SpecialFileLocations-limitations*
+
+KNOWN PROBLEMS				 *SpecialFileLocations-known-problems*
+
+TODO						   *SpecialFileLocations-todo*
+
+IDEAS						  *SpecialFileLocations-ideas*
+
+CONTRIBUTING				     *SpecialFileLocations-contribute*
+
+Report any bugs, send patches, or suggest features via the issue tracker at
+https://github.com/inkarkat/vim-SpecialFileLocations/issues or email (address below).
+
+==============================================================================
+HISTORY						*SpecialFileLocations-history*
+
+GOAL
+First published version.
+
+0.90	31-Oct-2017
+Split off into separate plugin.
+
+0.01	05-Feb-2010
+Started development.
+
+==============================================================================
+Copyright: (C) 2010-2017 Ingo Karkat
+The VIM LICENSE applies to this plugin; see |copyright|.
+
+Maintainer:	Ingo Karkat <ingo@karkat.de>
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:
