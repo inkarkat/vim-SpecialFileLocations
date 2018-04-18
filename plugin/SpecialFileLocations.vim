@@ -9,12 +9,14 @@
 "   - ingo/fs/path/split.vim autoload script
 "   - ingo/fs/tempfile.vim autoload script
 "
-" Copyright: (C) 2010-2017 Ingo Karkat
+" Copyright: (C) 2010-2018 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	02-Mar-2018	Compatibility: Need to explicitly load Funcrefs
+"                               in Vim 7.0/1.
 "	001	30-Oct-2017	file creation from ingocommands.vim
 
 " Avoid installing twice or when in unsupported Vim version.
@@ -23,6 +25,17 @@ if exists('g:loaded_SpecialFileLocations') || (v:version < 700)
 endif
 let g:loaded_SpecialFileLocations = 1
 
+if v:version < 702
+    " The Funcref doesn't trigger the autoload in older Vim versions.
+    runtime autoload/SpecialFileLocations.vim
+    runtime autoload/SpecialFileLocations/CdPath.vim
+    runtime autoload/SpecialFileLocations/Inbox.vim
+    runtime autoload/SpecialFileLocations/Logbook.vim
+    runtime autoload/SpecialFileLocations/Root.vim
+    runtime autoload/SpecialFileLocations/Scratch.vim
+    runtime autoload/SpecialFileLocations/Temp.vim
+    runtime autoload/SpecialFileLocations/Vimfiles.vim
+endif
 
 call CommandCompleteDirForAction#setup('CEdit', '', {
 \   'action': 'edit',
