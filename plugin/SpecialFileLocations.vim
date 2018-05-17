@@ -16,6 +16,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	004	18-May-2018	Use new generic ingo#plugin#cmdcomplete#Make()
+"                               instead of
+"                               SpecialFileLocations#Inbox#Complete().
 "	003	19-Apr-2018	Better default for g:inboxDirspec on Linux.
 "	002	02-Mar-2018	Compatibility: Need to explicitly load Funcrefs
 "                               in Vim 7.0/1.
@@ -270,45 +273,47 @@ if ! exists('g:inboxFilenameTemplate')
     \   'given': '%%s_%Y%m%d-%H%M%S',
     \}
 endif
+let s:InboxCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:inboxDirspec)
 call CommandCompleteDirForAction#setup('InboxEdit', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#Inbox#Complete'
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('Inboxsplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#Inbox#Complete'
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxSplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#Inbox#Complete'
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxDrop', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#Inbox#Complete'
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxRevert',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'Revert',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#Inbox#Complete'
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxRead', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#Inbox#Complete'
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxSource', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'source',
 \   'browsefilter': '*.vim',
 \   'isIncludeSubdirs': 1,
-\   'overrideCompleteFunction': 'SpecialFileLocations#Inbox#Complete'
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxNew   if ! SpecialFileLocations#Scratch#Create(g:inboxFilenameTemplate, g:inboxDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
 command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxSave  if ! SpecialFileLocations#Scratch#Save(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
 command! -bar -bang    -range=% -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxWrite if ! SpecialFileLocations#Scratch#Write(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+unlet! s:InboxCompleteFuncref
 
 
 
