@@ -8,6 +8,7 @@
 "   - ingo/fs/path.vim autoload script
 "   - ingo/fs/path/split.vim autoload script
 "   - ingo/fs/tempfile.vim autoload script
+"   - ingo/os.vim autoload script
 "
 " Copyright: (C) 2010-2018 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
@@ -15,6 +16,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	003	19-Apr-2018	Better default for g:inboxDirspec on Linux.
 "	002	02-Mar-2018	Compatibility: Need to explicitly load Funcrefs
 "                               in Vim 7.0/1.
 "	001	30-Oct-2017	file creation from ingocommands.vim
@@ -256,7 +258,7 @@ command! -bar                   -nargs=? -complete=customlist,SpecialFileLocatio
 
 
 if ! exists('g:inboxDirspec')
-    let g:inboxDirspec = 'O:\inbox'
+    let g:inboxDirspec = (ingo#os#IsWinOrDos() ? 'O:\inbox' : ingo#fs#path#Combine($HOME, 'public', 'inbox'))
     if ! isdirectory(g:inboxDirspec)
 	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'inbox')
     endif
