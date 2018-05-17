@@ -139,56 +139,71 @@ call CommandCompleteDirForAction#setup('RootWrite', function('SpecialFileLocatio
 
 
 
-call CommandCompleteDirForAction#setup('TempEdit', ingo#fs#tempfile#Make(''), {
+if ! exists('g:tempDirspec')
+    let g:tempDirspec = ingo#fs#tempfile#Make('')
+endif
+let s:TempCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:tempDirspec)
+call CommandCompleteDirForAction#setup('TempEdit', g:tempDirspec, {
 \   'action': 'edit',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('Tempsplit',ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('Tempsplit',g:tempDirspec, {
 \   'action': function('SpecialFileLocations#Above'),
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempSplit',ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('TempSplit',g:tempDirspec, {
 \   'action': function('SpecialFileLocations#Below'),
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempDrop', ingo#fs#tempfile#Make(''), {
-\   'isIncludeSubdirs': 1
+call CommandCompleteDirForAction#setup('TempDrop', g:tempDirspec, {
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempRevert',ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('TempRevert',g:tempDirspec, {
 \   'action': 'Revert',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempRead', ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('TempRead', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempReadFragment', ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('TempReadFragment', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempReadSnip', ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('TempReadSnip', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempSave', ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('TempSave', g:tempDirspec, {
 \   'commandAttributes': '-bang',
 \   'action': function('SpecialFileLocations#Temp#Save'),
 \   'defaultFilename': '',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 " Note: We cannot use SpecialFileLocations#Scratch#Write() here, as there's no way to pass on the
 " range. The only bit of functionality that we lose is the clearing of the name
 " of an unnamed buffer.
-call CommandCompleteDirForAction#setup('TempWrite', ingo#fs#tempfile#Make(''), {
+call CommandCompleteDirForAction#setup('TempWrite', g:tempDirspec, {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
 \   'defaultFilename': '%',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#Filename'),
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
+unlet! s:TempCompleteFuncref
 
 
 
@@ -202,44 +217,52 @@ if ! exists('g:scratchFilenameTemplate')
     \   'given': '%%s',
     \}
 endif
+let s:ScratchCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:scratchDirspec)
 call CommandCompleteDirForAction#setup('ScratchEdit', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'edit',
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('Scratchsplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchSplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchDrop', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchRevert',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'Revert',
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchRead', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchReadFragment', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchReadSnip', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
@@ -249,7 +272,8 @@ call CommandCompleteDirForAction#setup('ScratchReadSnip', ingo#fs#path#Combine(g
 call CommandCompleteDirForAction#setup('ScratchSource', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'source',
 \   'browsefilter': '*.vim',
-\   'isIncludeSubdirs': 1
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete ScratchNew       if ! SpecialFileLocations#Scratch#New(g:scratchFilenameTemplate, g:scratchDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
 command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete ScratchCreate    if ! SpecialFileLocations#Scratch#Create(g:scratchFilenameTemplate, g:scratchDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
@@ -257,6 +281,7 @@ command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocatio
 command! -bar -bang    -range=% -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete ScratchWrite     if ! SpecialFileLocations#Scratch#Write(g:scratchFilenameTemplate, g:scratchDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
 command! -nargs=* -complete=command ScratchIt if !empty(<q-args>)&&!&ma<Bar><Bar>&ro<Bar>call setline('.', getline('.'))<Bar>endif<Bar>if ! SpecialFileLocations#Scratch#It(<q-args>) | echoerr ingo#err#Get() | endif
 command! -bar                   -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete Unscratch        if ! SpecialFileLocations#Scratch#Unscratch(g:scratchFilenameTemplate, g:scratchDirspec, <q-args>) | echoerr ingo#err#Get() | endif
+unlet! s:ScratchCompleteFuncref
 
 
 
