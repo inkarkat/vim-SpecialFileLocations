@@ -14,6 +14,7 @@
 " REVISION	DATE		REMARKS
 "	002	16-Nov-2017	Refactoring: Factor out
 "				s:UnscratchWithCommand().
+"				Add SpecialFileLocations#Scratch#Unscratch().
 "	001	30-Oct-2017	file creation from ingocommands.vim
 
 function! s:InsertTimeAndFormat( template, filespec )
@@ -91,6 +92,9 @@ function! SpecialFileLocations#Scratch#Save( scratchFilenameTemplate, scratchDir
 
     return s:UnscratchWithCommand('keepalt saveas' . l:bang, a:scratchFilenameTemplate, a:scratchDirspec, a:filespec)
 endfunction
+function! SpecialFileLocations#Scratch#Unscratch( scratchFilenameTemplate, scratchDirspec, filespec )
+    return s:UnscratchWithCommand('keepalt file', a:scratchFilenameTemplate, a:scratchDirspec, a:filespec)
+endfunction
 function! s:UnscratchWithCommand( command, scratchFilenameTemplate, scratchDirspec, filespec )
     let l:save_bufsettings = 'setlocal ' . ingo#plugin#setting#BooleanToStringValue('modifiable') . ' '  . ingo#plugin#setting#BooleanToStringValue('readonly') . ' buftype=' . &l:buftype . ' bufhidden=' . &l:bufhidden . ' ' . ingo#plugin#setting#BooleanToStringValue('buflisted')
     let l:save_bufname = expand('%')
@@ -108,6 +112,9 @@ function! s:UnscratchWithCommand( command, scratchFilenameTemplate, scratchDirsp
 	return 0
     endtry
 endfunction
+
+
+
 function! s:ScratchCompletion( scratchDirspec, ArgLead, CmdLine, CursorPos )
     " Complete first files from a:scratchDirspec for the {filename} argument,
     " then any path- and filespec from the CWD for {dir} and {filespec}.
@@ -131,6 +138,8 @@ endfunction
 function! SpecialFileLocations#Scratch#Complete( ArgLead, CmdLine, CursorPos )
     return s:ScratchCompletion(ingo#fs#path#Combine(g:scratchDirspec, ''), a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction
+
+
 
 function! SpecialFileLocations#Scratch#It( cmd )
     try
