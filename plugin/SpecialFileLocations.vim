@@ -16,6 +16,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	005	20-May-2018	ENH: Make :Temp... accept numbered filename
+"                               arguments and translate them into the [count]'th
+"                               newest file.
 "	004	18-May-2018	Use new generic ingo#plugin#cmdcomplete#Make()
 "                               instead of
 "                               SpecialFileLocations#Inbox#Complete().
@@ -148,16 +151,19 @@ endif
 let s:TempCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:tempDirspec)
 call CommandCompleteDirForAction#setup('TempEdit', g:tempDirspec, {
 \   'action': 'edit',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('Tempsplit',g:tempDirspec, {
 \   'action': function('SpecialFileLocations#Above'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('TempSplit',g:tempDirspec, {
 \   'action': function('SpecialFileLocations#Below'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
@@ -167,30 +173,35 @@ call CommandCompleteDirForAction#setup('TempDrop', g:tempDirspec, {
 \})
 call CommandCompleteDirForAction#setup('TempRevert',g:tempDirspec, {
 \   'action': 'Revert',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('TempRead', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('TempReadFragment', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('TempReadSnip', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('TempSave', g:tempDirspec, {
 \   'commandAttributes': '-bang',
 \   'action': function('SpecialFileLocations#Temp#Save'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'defaultFilename': '',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
