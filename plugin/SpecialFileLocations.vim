@@ -19,6 +19,9 @@
 "	004	18-May-2018	Use new generic ingo#plugin#cmdcomplete#Make()
 "                               instead of
 "                               SpecialFileLocations#Inbox#Complete().
+"                               ENH: Perform newest-first sorting also for
+"                               :Temp... and :Scratch... commands; it's useful
+"                               there, too.
 "	003	19-Apr-2018	Better default for g:inboxDirspec on Linux.
 "	002	02-Mar-2018	Compatibility: Need to explicitly load Funcrefs
 "                               in Vim 7.0/1.
@@ -275,12 +278,12 @@ call CommandCompleteDirForAction#setup('ScratchSource', ingo#fs#path#Combine(g:s
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete ScratchNew       if ! SpecialFileLocations#Scratch#New(g:scratchFilenameTemplate, g:scratchDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete ScratchCreate    if ! SpecialFileLocations#Scratch#Create(g:scratchFilenameTemplate, g:scratchDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete ScratchSave      if ! SpecialFileLocations#Scratch#Save(g:scratchFilenameTemplate, g:scratchDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang    -range=% -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete ScratchWrite     if ! SpecialFileLocations#Scratch#Write(g:scratchFilenameTemplate, g:scratchDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+execute "command! -bar -count=0          -nargs=? -complete=customlist," . s:ScratchCompleteFuncref "ScratchNew       if ! SpecialFileLocations#Scratch#New(g:scratchFilenameTemplate, g:scratchDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif"
+execute "command! -bar -count=0          -nargs=? -complete=customlist," . s:ScratchCompleteFuncref "ScratchCreate    if ! SpecialFileLocations#Scratch#Create(g:scratchFilenameTemplate, g:scratchDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif"
+execute "command! -bar -bang             -nargs=? -complete=customlist," . s:ScratchCompleteFuncref "ScratchSave      if ! SpecialFileLocations#Scratch#Save(g:scratchFilenameTemplate, g:scratchDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif"
+execute "command! -bar -bang    -range=% -nargs=? -complete=customlist," . s:ScratchCompleteFuncref "ScratchWrite     if ! SpecialFileLocations#Scratch#Write(g:scratchFilenameTemplate, g:scratchDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif"
 command! -nargs=* -complete=command ScratchIt if !empty(<q-args>)&&!&ma<Bar><Bar>&ro<Bar>call setline('.', getline('.'))<Bar>endif<Bar>if ! SpecialFileLocations#Scratch#It(<q-args>) | echoerr ingo#err#Get() | endif
-command! -bar                   -nargs=? -complete=customlist,SpecialFileLocations#Scratch#Complete Unscratch        if ! SpecialFileLocations#Scratch#Unscratch(g:scratchFilenameTemplate, g:scratchDirspec, <q-args>) | echoerr ingo#err#Get() | endif
+execute "command! -bar                   -nargs=? -complete=customlist," . s:ScratchCompleteFuncref "Unscratch        if ! SpecialFileLocations#Scratch#Unscratch(g:scratchFilenameTemplate, g:scratchDirspec, <q-args>) | echoerr ingo#err#Get() | endif"
 unlet! s:ScratchCompleteFuncref
 
 
