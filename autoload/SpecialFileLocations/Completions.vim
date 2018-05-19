@@ -14,6 +14,11 @@
 " REVISION	DATE		REMARKS
 "	002	18-May-2018	Rename and make generic as a factory for
 "                               completion functions.
+"                               Don't append a:ArgLead to a:dirspec if it
+"                               contains (the beginning of) an absolute
+"                               filespec. Seen this in the (otherwise identical,
+"                               except for the sorting)
+"                               SpecialFileLocations#Scratch#Complete().
 "	001	30-Oct-2017	file creation from ingocommands.vim
 
 function! s:FtimeSort( i1, i2 )
@@ -25,14 +30,17 @@ function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, Arg
     " CWD for {dir} and {filespec}.
     let l:dirspecPrefix = glob(ingo#fs#path#Combine(a:dirspec, ''))
     return
-    \	map(
-    \	    map(
-    \		sort(
-    \               ingo#compat#glob(ingo#fs#path#Combine(a:dirspec, a:ArgLead . '*'), 0, 1),
-    \               's:FtimeSort'
-    \           ),
-    \		'strpart(v:val, len(l:dirspecPrefix))'
-    \	    ) +
+    \   map(
+    \       (! empty(a:ArgLead) && ingo#fs#path#IsAbsolute(a:ArgLead) ?
+    \           [] :
+    \           map(
+    \               sort(
+    \                   ingo#compat#glob(ingo#fs#path#Combine(a:dirspec, a:ArgLead . '*'), 0, 1),
+    \                   's:FtimeSort'
+    \               ),
+    \               'strpart(v:val, len(l:dirspecPrefix))'
+    \           )
+    \       ) +
     \       map(
     \           ingo#compat#glob(a:ArgLead . '*', 0, 1),
     \           'isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val'
