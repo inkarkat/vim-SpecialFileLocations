@@ -139,6 +139,12 @@ USAGE						  *SpecialFileLocations-usage*
 :ScratchIt {cmd}	Execute {cmd} and turn the current buffer into a
 			scratch buffer. Useful to :PrettyPrint a buffer and
 			then leave it alone.
+:Unscratch [{dir}|{filename} |{filespec}]
+			Turn a scratch buffer into a "normal" buffer by
+			removing any [Scratch] appendix from the buffer name
+			(or renaming to {filename}), and clearing scratchy
+			buffer options like 'buftype', 'bufhidden', etc.
+			Like |:ScratchSave| without the saving.
 
 
 	  *:InboxEdit* *:Inboxsplit* *:InboxSplit* *:InboxDrop* *:InboxRevert*
