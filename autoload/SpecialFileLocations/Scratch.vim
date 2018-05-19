@@ -6,12 +6,17 @@
 "   - ingo/fs/path.vim autoload script
 "   - ingo/plugin/setting.vim autoload script
 "
-" Copyright: (C) 2017 Ingo Karkat
+" Copyright: (C) 2017-2018 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	003	18-May-2018	Remove SpecialFileLocations#Scratch#Complete();
+"                               I now use a generic implementation derived from
+"                               :Inbox... completion that already was almost
+"                               identical; it only sorted newest files first,
+"                               which is useful for :Scratch... commands, too.
 "	002	16-Nov-2017	Refactoring: Factor out
 "				s:UnscratchWithCommand().
 "				Add SpecialFileLocations#Scratch#Unscratch().
@@ -111,32 +116,6 @@ function! s:UnscratchWithCommand( command, scratchFilenameTemplate, scratchDirsp
 	call ingo#err#SetVimException()
 	return 0
     endtry
-endfunction
-
-
-
-function! s:ScratchCompletion( scratchDirspec, ArgLead, CmdLine, CursorPos )
-    " Complete first files from a:scratchDirspec for the {filename} argument,
-    " then any path- and filespec from the CWD for {dir} and {filespec}.
-    let l:scratchDirspecPrefix = glob(a:scratchDirspec)
-    return
-    \	map(
-    \	    (! empty(a:ArgLead) && ingo#fs#path#IsAbsolute(a:ArgLead) ?
-    \           [] :
-    \           map(
-    \		    ingo#compat#glob(a:scratchDirspec . a:ArgLead . '*', 0, 1),
-    \		    'strpart(v:val, len(l:scratchDirspecPrefix))'
-    \	        )
-    \       ) +
-    \       map(
-    \           ingo#compat#glob(a:ArgLead . '*', 0, 1),
-    \           'isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val'
-    \       ),
-    \       'ingo#compat#fnameescape(v:val)'
-    \   )
-endfunction
-function! SpecialFileLocations#Scratch#Complete( ArgLead, CmdLine, CursorPos )
-    return s:ScratchCompletion(ingo#fs#path#Combine(g:scratchDirspec, ''), a:ArgLead, a:CmdLine, a:CursorPos)
 endfunction
 
 
