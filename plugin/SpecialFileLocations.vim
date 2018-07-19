@@ -16,9 +16,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	005	20-May-2018	ENH: Make :Temp... accept numbered filename
-"                               arguments and translate them into the [count]'th
-"                               newest file.
+"	005	20-May-2018	ENH: Make :Inbox..., :Scratch... and :Temp...
+"                               accept numbered filename arguments and translate
+"                               them into the [count]'th newest file.
 "	004	18-May-2018	Use new generic ingo#plugin#cmdcomplete#Make()
 "                               instead of
 "                               SpecialFileLocations#Inbox#Complete().
@@ -235,6 +235,7 @@ let s:ScratchCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFir
 call CommandCompleteDirForAction#setup('ScratchEdit', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'edit',
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
@@ -242,6 +243,7 @@ call CommandCompleteDirForAction#setup('ScratchEdit', ingo#fs#path#Combine(g:scr
 call CommandCompleteDirForAction#setup('Scratchsplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
@@ -249,6 +251,7 @@ call CommandCompleteDirForAction#setup('Scratchsplit',ingo#fs#path#Combine(g:scr
 call CommandCompleteDirForAction#setup('ScratchSplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
@@ -262,6 +265,7 @@ call CommandCompleteDirForAction#setup('ScratchDrop', ingo#fs#path#Combine(g:scr
 call CommandCompleteDirForAction#setup('ScratchRevert',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'Revert',
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
@@ -269,22 +273,26 @@ call CommandCompleteDirForAction#setup('ScratchRevert',ingo#fs#path#Combine(g:sc
 call CommandCompleteDirForAction#setup('ScratchRead', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchReadFragment', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('ScratchReadSnip', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1
 \})
 call CommandCompleteDirForAction#setup('ScratchSource', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'source',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'browsefilter': '*.vim',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
@@ -315,16 +323,19 @@ endif
 let s:InboxCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:inboxDirspec)
 call CommandCompleteDirForAction#setup('InboxEdit', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'edit',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('Inboxsplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxSplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
@@ -334,17 +345,20 @@ call CommandCompleteDirForAction#setup('InboxDrop', ingo#fs#path#Combine(g:inbox
 \})
 call CommandCompleteDirForAction#setup('InboxRevert',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'Revert',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxRead', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
 call CommandCompleteDirForAction#setup('InboxSource', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'source',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'browsefilter': '*.vim',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
