@@ -66,45 +66,47 @@ USAGE						  *SpecialFileLocations-usage*
 
 
 	       *:TempEdit* *:Tempsplit* *:TempSplit* *:TempDrop* *:TempRevert*
-:TempEdit {file}	Edit {file} ...
-:Tempsplit {file}	Edit {file} in a split (above) buffer...
-:TempSplit {file}	Edit {file} in a split (below) buffer...
-:TempDrop {file}	Drop {file} ...
-:TempRevert {file}	Revert the current buffer to the contents of {file} ...
+:TempEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
+			are not counted)) ...
+:Tempsplit {file}|N	Edit {file} in a split (above) buffer...
+:TempSplit {file}|N	Edit {file} in a split (below) buffer...
+:TempDrop {file}|N	Drop {file} ...
+:TempRevert {file}|N	Revert the current buffer to the contents of {file} ...
       *:TempRead* *:TempReadFragment* *:TempReadSnip* *:TempSave* *:TempWrite*
-:[line]TempRead {file}	Read {file} ...
+:[line]TempRead {file}|N	Read {file} ...
 			... from the temp directory or one of its
 			subdirectories.
-:[line]TempReadFragment {file}
+:[line]TempReadFragment {file}|N
 			:TempRead and insert fragment formatting around the
 			read contents.
-:[line]TempReadSnip {file}
+:[line]TempReadSnip {file}|N
 			:TempRead and insert snip formatting around the read
 			contents.
-:TempSave[!] [{file}]
-:[range]TempWrite[!] [{file}]
+:TempSave[!] [{file}|N]
+:[range]TempWrite[!] [{file}|N]
 			Persist buffer to the temp directory or one of its
 			subdirectories.
 
 
 *:ScratchEdit* *:Scratchsplit* *:ScratchSplit* *:ScratchDrop* *:ScratchRevert*
-:ScratchEdit {file}	Edit {file} from the default g:scratchDirspec.
-:Scratchsplit {file}	Edit {file} in a split (above) buffer.
-:ScratchSplit {file}	Edit {file} in a split (below) buffer.
-:ScratchDrop {file}	Drop {file} from the default g:scratchDirspec.
-:ScratchRevert {file}	Revert the current buffer to the contents of {file}
+:ScratchEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
+			are not counted)) from the default g:scratchDirspec.
+:Scratchsplit {file}|N	Edit {file} in a split (above) buffer.
+:ScratchSplit {file}|N	Edit {file} in a split (below) buffer.
+:ScratchDrop {file}|N	Drop {file} from the default g:scratchDirspec.
+:ScratchRevert {file}|N	Revert the current buffer to the contents of {file}
 			from the default g:scratchDirspec.
 		    *:ScratchRead*   *:ScratchReadFragment* *:ScratchReadSnip*
-:[line]ScratchRead {file}
+:[line]ScratchRead {file}|N
 			Read {file} from the default g:scratchDirspec.
-:[line]ScratchReadFragment {file}
+:[line]ScratchReadFragment {file}|N
 			:ScratchRead and insert fragment formatting around the
 			read contents.
-:[line]ScratchReadSnip {file}
+:[line]ScratchReadSnip {file}|N
 			:ScratchRead and insert snip formatting around the
 			read contents.
 			       *:ScratchSource* *:ScratchNew* *:ScratchCreate*
-:ScratchSource {file}	Source {file} from the default g:scratchDirspec.
+:ScratchSource {file}|N	Source {file} from the default g:scratchDirspec.
 :[N]ScratchNew [{dir}|{filename} |{filespec}]
 			Create a |:new| buffer in the default g:scratchDirspec,
 			or passed {dir}, or passed {filename} (in
@@ -118,8 +120,8 @@ USAGE						  *SpecialFileLocations-usage*
 			a normal buffer where changes have to be persisted
 			with |:w| or discarded with |:bd|!.
 						*:ScratchSave* *:ScratchWrite*
-:ScratchSave[!]  [{dir}|{filename} |{filespec}]
-:[range]ScratchWrite[!] [{dir}|{filename} |{filespec}]
+:ScratchSave[!]  [{dir}|{filename} |{filespec} |N]
+:[range]ScratchWrite[!] [{dir}|{filename} |{filespec} |N]
 			Persist a (scratch, or any) buffer to the default
 			g:scratchDirspec, or passed {dir} (with the buffer's
 			filename), or passed {filename} (in g:scratchDirspec),
@@ -148,23 +150,24 @@ USAGE						  *SpecialFileLocations-usage*
 
 
 	  *:InboxEdit* *:Inboxsplit* *:InboxSplit* *:InboxDrop* *:InboxRevert*
-:InboxEdit {file}	Edit {file} from the default g:inboxDirspec.
-:Inboxsplit {file}	Edit {file} in a split (above) buffer.
-:InboxSplit {file}	Edit {file} in a split (below) buffer.
-:InboxDrop {file}	Drop {file} from the default g:inboxDirspec.
-:InboxRevert {file}	Revert the current buffer to the contents of {file}
+:InboxEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
+			are not counted)) from the default g:inboxDirspec.
+:Inboxsplit {file}|N	Edit {file} in a split (above) buffer.
+:InboxSplit {file}|N	Edit {file} in a split (below) buffer.
+:InboxDrop {file}|N	Drop {file} from the default g:inboxDirspec.
+:InboxRevert {file}|N	Revert the current buffer to the contents of {file}
 			from the default g:inboxDirspec.
 				       *:InboxRead* *:InboxSource* *:InboxNew*
-:[line]InboxRead {file}
+:[line]InboxRead {file}|N
 			Read {file} from the default g:inboxDirspec.
-:InboxSource {file}	Source {file} from the default g:inboxDirspec.
+:InboxSource {file}|N	Source {file} from the default g:inboxDirspec.
 :[N]InboxNew [{dir}|{filename} |{filespec}]
 			Create a |:new| buffer in the default g:inboxDirspec,
 			or passed {dir}, or passed {filename} (in
 			g:inboxDirspec), or passed {filespec}.
 						    *:InboxSave* *:InboxWrite*
-:InboxSave[!]  [{dir}|{filename} |{filespec}]
-:[range]InboxWrite[!] [{dir}|{filename} |{filespec}]
+:InboxSave[!]  [{dir}|{filename} |{filespec} |N]
+:[range]InboxWrite[!] [{dir}|{filename} |{filespec} |N]
 			Persist a (inbox, or any) buffer to the default
 			g:inboxDirspec, or passed {dir} (with the buffer's
 			filename), or passed {filename} (in g:inboxDirspec),
@@ -276,7 +279,7 @@ Split off into separate plugin.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2010-2017 Ingo Karkat
+Copyright: (C) 2010-2018 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
