@@ -16,6 +16,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	006	20-Jul-2018	On Windows, default for g:inboxDirspec should
+"                               consider I:\ (which would be mounted writable)
+"                               before (readonly) O:\inbox.
 "	005	20-May-2018	ENH: Make :Inbox..., :Scratch... and :Temp...
 "                               accept numbered filename arguments and translate
 "                               them into the [count]'th newest file.
@@ -308,7 +311,16 @@ unlet! s:ScratchCompleteFuncref
 
 
 if ! exists('g:inboxDirspec')
-    let g:inboxDirspec = (ingo#os#IsWinOrDos() ? 'O:\inbox' : ingo#fs#path#Combine($HOME, 'public', 'inbox'))
+    if ingo#os#IsWinOrDos()
+	let g:inboxDirspec = 'I:\'
+
+	if ! isdirectory(g:inboxDirspec)
+	    let g:inboxDirspec = 'O:\inbox'
+	endif
+    else
+	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'public', 'inbox')
+    endif
+
     if ! isdirectory(g:inboxDirspec)
 	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'inbox')
     endif
