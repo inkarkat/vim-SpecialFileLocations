@@ -16,6 +16,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	007	13-Sep-2018	Consistently define :...Fragment and :...Snip.
 "	006	20-Jul-2018	On Windows, default for g:inboxDirspec should
 "                               consider I:\ (which would be mounted writable)
 "                               before (readonly) O:\inbox.
@@ -88,6 +89,12 @@ call CommandCompleteDirForAction#setup('CReadFragment', '', {
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
+call CommandCompleteDirForAction#setup('CReadSnip', '', {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Snip" "%:t"',
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
+\})
 call CommandCompleteDirForAction#setup('CSave', '', {
 \   'commandAttributes': '-bang',
 \   'action': 'saveas<bang>',
@@ -131,6 +138,11 @@ call CommandCompleteDirForAction#setup('RootRead', function('SpecialFileLocation
 call CommandCompleteDirForAction#setup('RootReadFragment', function('SpecialFileLocations#Root#Dirspec'), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" ingo#fs#path#split#AtBasePath("%", SpecialFileLocations#Root#Dirspec())',
+\   'isIncludeSubdirs': 1
+\})
+call CommandCompleteDirForAction#setup('RootReadSnip', function('SpecialFileLocations#Root#Dirspec'), {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Snip" ingo#fs#path#split#AtBasePath("%", SpecialFileLocations#Root#Dirspec())',
 \   'isIncludeSubdirs': 1
 \})
 call CommandCompleteDirForAction#setup('RootSave', function('SpecialFileLocations#Root#Dirspec'), {
@@ -364,6 +376,20 @@ call CommandCompleteDirForAction#setup('InboxRevert',ingo#fs#path#Combine(g:inbo
 call CommandCompleteDirForAction#setup('InboxRead', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
+\})
+call CommandCompleteDirForAction#setup('InboxReadFragment', g:inboxDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Fragment" "%:t"',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:InboxCompleteFuncref
+\})
+call CommandCompleteDirForAction#setup('InboxReadSnip', g:inboxDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Snip" "%:t"',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
