@@ -36,11 +36,14 @@ USAGE						  *SpecialFileLocations-usage*
 :CSplit {file}		Edit {file} in a split (below) buffer...
 :CDrop {file}		Drop {file} ...
 :CRevert {file}		Revert the current buffer to the contents of {file} ...
-				  *:CRead* *:CReadFragment* *:CSave* *:CWrite*
+		     *:CRead* *:CReadFragment* *:CReadSnip* *:CSave* *:CWrite*
 :[line]CRead {file}	Read {file} ...
 			... from one of the 'cdpath' directories.
 :[line]CReadFragment {file}
 			:CRead and insert fragment formatting around the read
+			contents.
+:[line]CReadSnip {file}
+			:CRead and insert snip formatting around the read
 			contents.
 :CSave[!] [{file}]
 :[range]CWrite[!] [{file}]
@@ -52,12 +55,15 @@ USAGE						  *SpecialFileLocations-usage*
 :RootSplit {file}	Edit project {file} in a split (below) buffer...
 :RootDrop {file}	Drop project {file} ...
 :RootRevert {file}	Revert the current buffer to the contents of {file} ...
-		      *:RootRead* *:RootReadFragment* *:RootSave* *:RootWrite*
+      *:RootRead* *:RootReadFragment* *:RootReadSnip* *:RootSave* *:RootWrite*
 :[line]RootRead {file}	Read project {file} ...
 			... from the project root or one of its
 			subdirectories.
 :[line]RootReadFragment {file}
 			:RootRead and insert fragment formatting around the
+			read contents.
+:[line]RootReadSnip {file}
+			:RootRead and insert snip formatting around the
 			read contents.
 :RootSave[!] [{file}]
 :[range]RootWrite[!] [{file}]
@@ -149,6 +155,38 @@ USAGE						  *SpecialFileLocations-usage*
 			Like |:ScratchSave| without the saving.
 
 
+			      *:UEdit* *:Usplit* *:USplit* *:UDrop* *:URevert*
+:UEdit {file}|N		Edit {file} (or the N'th newest file (subdirectories
+			are not counted)) from the default g:unixhomeDirspec.
+:Usplit {file}|N	Edit {file} in a split (above) buffer.
+:USplit {file}|N	Edit {file} in a split (below) buffer.
+:UDrop {file}|N		Drop {file} from the default g:unixhomeDirspec.
+:URevert {file}|N	Revert the current buffer to the contents of {file}
+			from the default g:unixhomeDirspec.
+		     *:URead* *:UReadFragment* *:UReadSnip* *:USource* *:UNew*
+:[line]URead {file}|N
+			Read {file} from the default g:unixhomeDirspec.
+:[line]UReadFragment {file}|N
+			:URead and insert fragment formatting around the read
+			contents.
+:[line]UReadSnip {file}|N
+			:URead and insert snip formatting around the read
+			contents.
+:USource {file}|N	Source {file} from the default g:unixhomeDirspec.
+:[N]UNew [{dir}|{filename} |{filespec}]
+			Create a |:new| buffer in the default g:unixhomeDirspec,
+			or passed {dir}, or passed {filename} (in
+			g:unixhomeDirspec), or passed {filespec}.
+						    *:USave* *:UWrite*
+:USave[!]  [{dir}|{filename} |{filespec} |N]
+:[range]UWrite[!] [{dir}|{filename} |{filespec} |N]
+			Persist a (Unixhome, or any) buffer to the default
+			g:unixhomeDirspec, or passed {dir} (with the buffer's
+			filename), or passed {filename} (in
+			g:unixhomeDirspec), or passed {filespec} (if possible,
+			inside g:unixhomeDirspec).
+
+
 	  *:InboxEdit* *:Inboxsplit* *:InboxSplit* *:InboxDrop* *:InboxRevert*
 :InboxEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
 			are not counted)) from the default g:inboxDirspec.
@@ -157,9 +195,15 @@ USAGE						  *SpecialFileLocations-usage*
 :InboxDrop {file}|N	Drop {file} from the default g:inboxDirspec.
 :InboxRevert {file}|N	Revert the current buffer to the contents of {file}
 			from the default g:inboxDirspec.
-				       *:InboxRead* *:InboxSource* *:InboxNew*
+ *:InboxRead* *:InboxReadFragment* *:InboxReadSnip* *:InboxSource* *:InboxNew*
 :[line]InboxRead {file}|N
 			Read {file} from the default g:inboxDirspec.
+:[line]InboxReadFragment {file}|N
+			:InboxRead and insert fragment formatting around the
+			read contents.
+:[line]InboxReadSnip {file}|N
+			:InboxRead and insert snip formatting around the
+			read contents.
 :InboxSource {file}|N	Source {file} from the default g:inboxDirspec.
 :[N]InboxNew [{dir}|{filename} |{filespec}]
 			Create a |:new| buffer in the default g:inboxDirspec,
@@ -173,12 +217,6 @@ USAGE						  *SpecialFileLocations-usage*
 			filename), or passed {filename} (in g:inboxDirspec),
 			or passed {filespec} (if possible, inside
 			g:inboxDirspec).
-			:InboxSave converts a scratch buffer to a "normal"
-			buffer, which can subsequently be saved via :w.
-			With :InboxWrite, the buffer keeps any potential
-			"scratchiness", and can be updated, toggled, ... with
-			the usual commands. Subsequent saves must be done with
-			:InboxWrite, too.
 
 
 						  *:Logbook* *:LogbookInstall*
