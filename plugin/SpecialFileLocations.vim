@@ -17,6 +17,7 @@
 "
 " REVISION	DATE		REMARKS
 "	007	13-Sep-2018	Consistently define :...Fragment and :...Snip.
+"				Add :U... commands for my Unixhome.
 "	006	20-Jul-2018	On Windows, default for g:inboxDirspec should
 "                               consider I:\ (which would be mounted writable)
 "                               before (readonly) O:\inbox.
@@ -319,6 +320,61 @@ execute "command! -bar -bang    -range=% -nargs=? -complete=customlist," . s:Scr
 command! -nargs=* -complete=command ScratchIt if !empty(<q-args>)&&!&ma<Bar><Bar>&ro<Bar>call setline('.', getline('.'))<Bar>endif<Bar>if ! SpecialFileLocations#Scratch#It(<q-args>) | echoerr ingo#err#Get() | endif
 execute "command! -bar                   -nargs=? -complete=customlist," . s:ScratchCompleteFuncref "Unscratch        if ! SpecialFileLocations#Scratch#Unscratch(g:scratchFilenameTemplate, g:scratchDirspec, <q-args>) | echoerr ingo#err#Get() | endif"
 unlet! s:ScratchCompleteFuncref
+
+
+
+if ! exists('g:unixhomeDirspec')
+    let g:unixhomeDirspec = ingo#fs#path#Combine($HOME, 'Unixhome')
+endif
+if ! exists('g:unixhomeFilenameTemplate')
+    let g:unixhomeFilenameTemplate = {
+    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
+    \   'named': '%%s_%Y%m%d-%H%M%S',
+    \   'given': '%%s_%Y%m%d-%H%M%S',
+    \}
+endif
+call CommandCompleteDirForAction#setup('UEdit', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+\   'action': 'edit',
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('Usplit',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+\   'action': function('SpecialFileLocations#Above'),
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('USplit',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+\   'action': function('SpecialFileLocations#Below'),
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('UDrop', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('URevert',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+\   'action': 'Revert',
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('URead', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read',
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('UReadFragment', g:unixhomeDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Fragment" "%:t"',
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('UReadSnip', g:unixhomeDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Snip" "%:t"',
+\   'isIncludeSubdirs': 1,
+\})
+call CommandCompleteDirForAction#setup('USource', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+\   'action': 'source',
+\   'browsefilter': '*.vim',
+\   'isIncludeSubdirs': 1,
+\})
+command! -bar -count=0          -nargs=? UNew   if ! SpecialFileLocations#Scratch#Create(g:unixhomeFilenameTemplate, g:unixhomeDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? USave  if ! SpecialFileLocations#Scratch#Save(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang    -range=% -nargs=? UWrite if ! SpecialFileLocations#Scratch#Write(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
 
 
 
