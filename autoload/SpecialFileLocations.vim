@@ -6,6 +6,9 @@
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
+"
+" REVISION	DATE		REMARKS
+"	001	31-Oct-2017	file creation from ingocommands.vim
 
 function! SpecialFileLocations#Above( dirspec, filename, fileOptionsAndCommands )
     execute ingo#plugin#setting#Default(g:CommandCompleteDirForAction_Context.mods, 'aboveleft') 'split' a:fileOptionsAndCommands . a:dirspec . a:filename
