@@ -16,6 +16,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	008	25-Oct-2018	Add :Testing... commands for access to files
+"                               frequently used for testing.
 "	007	13-Sep-2018	Consistently define :...Fragment and :...Snip.
 "				Add :U... commands for my Unixhome.
 "	006	20-Jul-2018	On Windows, default for g:inboxDirspec should
@@ -234,6 +236,43 @@ call CommandCompleteDirForAction#setup('TempWrite', g:tempDirspec, {
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
 unlet! s:TempCompleteFuncref
+
+
+
+if ! exists('g:testingDirspec')
+    let g:testingDirspec = ingo#fs#path#Combine(g:unixhomeDirspec, 'testing')
+endif
+call CommandCompleteDirForAction#setup('TestingEdit', g:testingDirspec, {
+\   'action': 'edit',
+\   'isIncludeSubdirs': 1
+\})
+call CommandCompleteDirForAction#setup('Testingsplit', g:testingDirspec, {
+\   'action': function('SpecialFileLocations#Above'),
+\   'isIncludeSubdirs': 1
+\})
+call CommandCompleteDirForAction#setup('TestingSplit', g:testingDirspec, {
+\   'action': function('SpecialFileLocations#Below'),
+\   'isIncludeSubdirs': 1
+\})
+call CommandCompleteDirForAction#setup('TestingDrop', g:testingDirspec, {
+\   'isIncludeSubdirs': 1
+\})
+call CommandCompleteDirForAction#setup('TestingSave', g:testingDirspec, {
+\   'commandAttributes': '-bang',
+\   'action': 'saveas<bang>',
+\   'defaultFilename': '%',
+\   'isIncludeSubdirs': 1
+\})
+call CommandCompleteDirForAction#setup('TestingWrite', g:testingDirspec, {
+\   'commandAttributes': '-bang -range=%',
+\   'action': '<line1>,<line2>write<bang>',
+\   'defaultFilename': '%',
+\   'isIncludeSubdirs': 1
+\})
+call CommandCompleteDirForAction#setup('TestingYank', g:testingDirspec, {
+\   'action': function('SpecialFileLocations#Yank'),
+\   'isIncludeSubdirs': 1
+\})
 
 
 
