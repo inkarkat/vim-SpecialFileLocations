@@ -43,6 +43,66 @@ if exists('g:loaded_SpecialFileLocations') || (v:version < 700)
 endif
 let g:loaded_SpecialFileLocations = 1
 
+"- configuration ---------------------------------------------------------------
+
+if ! exists('g:tempDirspec')
+    let g:tempDirspec = ingo#fs#tempfile#Make('')
+endif
+if ! exists('g:unixhomeDirspec')
+    let g:unixhomeDirspec = ingo#fs#path#Combine($HOME, 'Unixhome')
+endif
+if ! exists('g:unixhomeFilenameTemplate')
+    let g:unixhomeFilenameTemplate = {
+    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
+    \   'named': '%%s_%Y%m%d-%H%M%S',
+    \   'given': '%%s_%Y%m%d-%H%M%S',
+    \}
+endif
+if ! exists('g:testingDirspec')
+    let g:testingDirspec = ingo#fs#path#Combine(g:unixhomeDirspec, 'testing')
+endif
+if ! exists('g:scratchDirspec')
+    let g:scratchDirspec = ingo#fs#path#Combine($HOME, 'scratch')
+endif
+if ! exists('g:scratchFilenameTemplate')
+    let g:scratchFilenameTemplate = {
+    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
+    \   'named': '%%s',
+    \   'given': '%%s',
+    \}
+endif
+if ! exists('g:inboxDirspec')
+    if ingo#os#IsWinOrDos()
+	let g:inboxDirspec = 'I:\'
+
+	if ! isdirectory(g:inboxDirspec)
+	    let g:inboxDirspec = 'O:\inbox'
+	endif
+    else
+	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'public', 'inbox')
+    endif
+
+    if ! isdirectory(g:inboxDirspec)
+	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'inbox')
+    endif
+endif
+if ! exists('g:inboxFilenameTemplate')
+    let g:inboxFilenameTemplate = {
+    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
+    \   'named': '%%s_%Y%m%d-%H%M%S',
+    \   'given': '%%s_%Y%m%d-%H%M%S',
+    \}
+endif
+if ! exists('g:logbookDirspec')
+    let g:logbookDirspec = ingo#fs#path#Combine($HOME, 'Dropbox', 'logbooks', '')
+endif
+if ! exists('g:logbookDefaultFilename')
+    let g:logbookDefaultFilename = 'personal.txt'
+endif
+
+
+"- commands --------------------------------------------------------------------
+
 if v:version < 702
     " The Funcref doesn't trigger the autoload in older Vim versions.
     runtime autoload/SpecialFileLocations.vim
@@ -163,9 +223,6 @@ call CommandCompleteDirForAction#setup('RootWrite', function('SpecialFileLocatio
 
 
 
-if ! exists('g:tempDirspec')
-    let g:tempDirspec = ingo#fs#tempfile#Make('')
-endif
 let s:TempCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:tempDirspec)
 call CommandCompleteDirForAction#setup('TempEdit', g:tempDirspec, {
 \   'action': 'edit',
@@ -239,53 +296,40 @@ unlet! s:TempCompleteFuncref
 
 
 
-if ! exists('g:testingDirspec')
-    let g:testingDirspec = ingo#fs#path#Combine(g:unixhomeDirspec, 'testing')
-endif
-call CommandCompleteDirForAction#setup('TestingEdit', g:testingDirspec, {
+call CommandCompleteDirForAction#setup('TestingEdit', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('Testingsplit', g:testingDirspec, {
+call CommandCompleteDirForAction#setup('Testingsplit', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingSplit', g:testingDirspec, {
+call CommandCompleteDirForAction#setup('TestingSplit', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingDrop', g:testingDirspec, {
+call CommandCompleteDirForAction#setup('TestingDrop', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingSave', g:testingDirspec, {
+call CommandCompleteDirForAction#setup('TestingSave', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'commandAttributes': '-bang',
 \   'action': 'saveas<bang>',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingWrite', g:testingDirspec, {
+call CommandCompleteDirForAction#setup('TestingWrite', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingYank', g:testingDirspec, {
+call CommandCompleteDirForAction#setup('TestingYank', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': function('SpecialFileLocations#Yank'),
 \   'isIncludeSubdirs': 1
 \})
 
 
 
-if ! exists('g:scratchDirspec')
-    let g:scratchDirspec = ingo#fs#path#Combine($HOME, 'scratch')
-endif
-if ! exists('g:scratchFilenameTemplate')
-    let g:scratchFilenameTemplate = {
-    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
-    \   'named': '%%s',
-    \   'given': '%%s',
-    \}
-endif
 let s:ScratchCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:scratchDirspec)
 call CommandCompleteDirForAction#setup('ScratchEdit', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'edit',
@@ -362,16 +406,6 @@ unlet! s:ScratchCompleteFuncref
 
 
 
-if ! exists('g:unixhomeDirspec')
-    let g:unixhomeDirspec = ingo#fs#path#Combine($HOME, 'Unixhome')
-endif
-if ! exists('g:unixhomeFilenameTemplate')
-    let g:unixhomeFilenameTemplate = {
-    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
-    \   'named': '%%s_%Y%m%d-%H%M%S',
-    \   'given': '%%s_%Y%m%d-%H%M%S',
-    \}
-endif
 call CommandCompleteDirForAction#setup('UEdit', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1,
@@ -417,28 +451,6 @@ command! -bar -bang    -range=% -nargs=? UWrite if ! SpecialFileLocations#Scratc
 
 
 
-if ! exists('g:inboxDirspec')
-    if ingo#os#IsWinOrDos()
-	let g:inboxDirspec = 'I:\'
-
-	if ! isdirectory(g:inboxDirspec)
-	    let g:inboxDirspec = 'O:\inbox'
-	endif
-    else
-	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'public', 'inbox')
-    endif
-
-    if ! isdirectory(g:inboxDirspec)
-	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'inbox')
-    endif
-endif
-if ! exists('g:inboxFilenameTemplate')
-    let g:inboxFilenameTemplate = {
-    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
-    \   'named': '%%s_%Y%m%d-%H%M%S',
-    \   'given': '%%s_%Y%m%d-%H%M%S',
-    \}
-endif
 let s:InboxCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:inboxDirspec)
 call CommandCompleteDirForAction#setup('InboxEdit', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'edit',
@@ -503,12 +515,6 @@ unlet! s:InboxCompleteFuncref
 
 
 
-if ! exists('g:logbookDirspec')
-    let g:logbookDirspec = ingo#fs#path#Combine($HOME, 'Dropbox', 'logbooks', '')
-endif
-if ! exists('g:logbookDefaultFilename')
-    let g:logbookDefaultFilename = 'personal.txt'
-endif
 call CommandCompleteDirForAction#setup('Logbook', g:logbookDirspec, {
 \   'isIncludeSubdirs': 1,
 \   'defaultFilename': g:logbookDefaultFilename,
