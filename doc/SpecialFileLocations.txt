@@ -94,6 +94,20 @@ USAGE						  *SpecialFileLocations-usage*
 			subdirectories.
 
 
+		 *:TestingEdit* *:Testingsplit* *:TestingSplit* *:TestingDrop*
+:TestingEdit {file}	Edit testing {file} ...
+:Testingsplit {file}	Edit testing {file} in a split (above) buffer...
+:TestingSplit {file}	Edit testing {file} in a split (below) buffer...
+:TestingDrop {file}	Drop testing {file} ...
+						*:TestingSave* *:TestingWrite*
+:TestingSave[!] [{file}]
+:[range]TestingWrite[!] [{file}]
+			Persist buffer as a testing file.
+								*:TestingYank*
+:TestingYank [{file}]	Yank the filespec of testing {file} into both default
+			register and the system clipboard.
+
+
 *:ScratchEdit* *:Scratchsplit* *:ScratchSplit* *:ScratchDrop* *:ScratchRevert*
 :ScratchEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
 			are not counted)) from the default g:scratchDirspec.
