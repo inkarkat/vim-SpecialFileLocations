@@ -6,12 +6,13 @@
 "   - ingo/fs/path.vim autoload script
 "   - ingo/plugin/cmdcomplete.vim autoload script
 "
-" Copyright: (C) 2017-2018 Ingo Karkat
+" Copyright: (C) 2017-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	004	13-May-2019	Move s:FtimeSort() into ingo-library for reuse.
 "	003	20-May-2018	FIX: Indicate completed directories from
 "                               a:dirspec with trailing path separator.
 "                               ENH: Add
@@ -34,9 +35,6 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! s:FtimeSort( i1, i2 )
-    return -1 * ingo#collections#memoized#Mapsort('getftime(v:val)', a:i1, a:i2, {'cacheTimeInSeconds': 10})
-endfunction
 function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, ArgLead, CmdLine, CursorPos )
     " Complete first files from a:dirspec for the {filename} argument (sorted by
     " file modification date descending), then any path- and filespec from the
@@ -49,7 +47,7 @@ function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, Arg
     \           map(
     \               sort(
     \                   ingo#compat#glob(ingo#fs#path#Combine(a:dirspec, a:ArgLead . '*'), 0, 1),
-    \                   's:FtimeSort'
+    \                   'ingo#collections#FileModificationTimeSort'
     \               ),
     \               'strpart(isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val, len(l:dirspecPrefix))'
     \           )
