@@ -12,6 +12,11 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	004	20-May-2018	ENH: Allow count-based selection of scratch
+"                               files via a FilenameProcessingFunction, and by
+"                               incorporating the lookup into
+"                               SpecialFileLocations#Scratch#Write() and
+"                               SpecialFileLocations#Scratch#Save().
 "	003	18-May-2018	Remove SpecialFileLocations#Scratch#Complete();
 "                               I now use a generic implementation derived from
 "                               :Inbox... completion that already was almost
@@ -70,8 +75,9 @@ function! SpecialFileLocations#Scratch#Create( scratchFilenameTemplate, scratchD
 endfunction
 function! SpecialFileLocations#Scratch#Write( scratchFilenameTemplate, scratchDirspec, bang, range, filespec )
     let l:isUnnamedBuffer = empty(expand('%'))
+    let l:filespec = SpecialFileLocations#Completions#NewestFileProcessing(a:scratchDirspec, a:filespec, '')[0]
     try
-	execute 'keepalt' a:range . 'write' . a:bang s:ScratchFilespec(a:scratchFilenameTemplate, a:scratchDirspec, expand('%:t'), a:filespec)
+	execute 'keepalt' a:range . 'write' . a:bang s:ScratchFilespec(a:scratchFilenameTemplate, a:scratchDirspec, expand('%:t'), l:filespec)
 
 	if l:isUnnamedBuffer
 	    " The :write command sets the buffer name of an unnamed buffer. We
@@ -87,7 +93,8 @@ endfunction
 
 function! SpecialFileLocations#Scratch#Save( scratchFilenameTemplate, scratchDirspec, bang, filespec )
     let l:bang = a:bang
-    if &l:buftype ==# 'nowrite' && &l:readonly && (empty(a:filespec) || ingo#fs#path#Equals(a:filespec, expand('%:p')))
+    let l:filespec = SpecialFileLocations#Completions#NewestFileProcessing(a:scratchDirspec, a:filespec, '')[0]
+    if &l:buftype ==# 'nowrite' && &l:readonly && (empty(l:filespec) || ingo#fs#path#Equals(l:filespec, expand('%:p')))
 	" Vim will complain with "E13: File exists (add ! to override)" if a
 	" non-persistable buffer is written. DWIM and don't force the user to
 	" use ! if the current scratch file should be written to its original
@@ -95,7 +102,7 @@ function! SpecialFileLocations#Scratch#Save( scratchFilenameTemplate, scratchDir
 	let l:bang = '!'
     endif
 
-    return s:UnscratchWithCommand('keepalt saveas' . l:bang, a:scratchFilenameTemplate, a:scratchDirspec, a:filespec)
+    return s:UnscratchWithCommand('keepalt saveas' . l:bang, a:scratchFilenameTemplate, a:scratchDirspec, l:filespec)
 endfunction
 function! SpecialFileLocations#Scratch#Unscratch( scratchFilenameTemplate, scratchDirspec, filespec )
     return s:UnscratchWithCommand('keepalt file', a:scratchFilenameTemplate, a:scratchDirspec, a:filespec)
@@ -116,6 +123,10 @@ function! s:UnscratchWithCommand( command, scratchFilenameTemplate, scratchDirsp
 	call ingo#err#SetVimException()
 	return 0
     endtry
+endfunction
+
+function! SpecialFileLocations#Scratch#NewestFileProcessing( filename, fileOptionsAndCommands )
+    return SpecialFileLocations#Completions#NewestFileProcessing(g:scratchDirspec, a:filename, a:fileOptionsAndCommands)
 endfunction
 
 
