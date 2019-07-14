@@ -12,6 +12,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	005	28-May-2019	BUG: Forgot to replace s:FtimeSort() with
+"                               ingo-library function.
 "	004	13-May-2019	Move s:FtimeSort() into ingo-library for reuse.
 "	003	20-May-2018	FIX: Indicate completed directories from
 "                               a:dirspec with trailing path separator.
@@ -72,7 +74,7 @@ function! SpecialFileLocations#Completions#GetNewestFile( dirspec, count )
     \       filter(
     \           sort(
     \               ingo#compat#glob(ingo#fs#path#Combine(a:dirspec, '*'), 0, 1),
-    \               's:FtimeSort'
+    \               'ingo#collections#FileModificationTimeSort'
     \           ),
     \           '! isdirectory(v:val)'
     \       ),
