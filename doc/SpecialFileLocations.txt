@@ -144,9 +144,9 @@ USAGE						  *SpecialFileLocations-usage*
 :[range]ScratchWrite[!] [{dir}|{filename} |{filespec} |N]
 			Persist a (scratch, or any) buffer to the default
 			g:scratchDirspec, or passed {dir} (with the buffer's
-			filename), or passed {filename} (in g:scratchDirspec),
-			or passed {filespec} (if possible, inside
-			g:scratchDirspec).
+			filename), or passed {filename} (in g:scratchDirspec,
+			unless it's prepended with "./"), or passed {filespec}
+			(if possible, inside g:scratchDirspec).
 			:ScratchSave converts the scratch buffer to a "normal"
 			buffer, which can subsequently be saved via :w.
 			With :ScratchWrite, the scratch buffer keeps its
@@ -196,9 +196,9 @@ USAGE						  *SpecialFileLocations-usage*
 :[range]UWrite[!] [{dir}|{filename} |{filespec} |N]
 			Persist a (Unixhome, or any) buffer to the default
 			g:unixhomeDirspec, or passed {dir} (with the buffer's
-			filename), or passed {filename} (in
-			g:unixhomeDirspec), or passed {filespec} (if possible,
-			inside g:unixhomeDirspec).
+			filename), or passed {filename} (in g:unixhomeDirspec,
+			unless it's prepended with "./"), or passed {filespec}
+			(if possible, inside g:unixhomeDirspec).
 
 
 	  *:InboxEdit* *:Inboxsplit* *:InboxSplit* *:InboxDrop* *:InboxRevert*
@@ -228,9 +228,9 @@ USAGE						  *SpecialFileLocations-usage*
 :[range]InboxWrite[!] [{dir}|{filename} |{filespec} |N]
 			Persist a (inbox, or any) buffer to the default
 			g:inboxDirspec, or passed {dir} (with the buffer's
-			filename), or passed {filename} (in g:inboxDirspec),
-			or passed {filespec} (if possible, inside
-			g:inboxDirspec).
+			filename), or passed {filename} (in g:inboxDirspec,
+			unless it's prepended with "./"), or passed {filespec}
+			(if possible, inside g:inboxDirspec).
 
 
 						  *:Logbook* *:LogbookInstall*
