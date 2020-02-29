@@ -10,31 +10,31 @@
 "   - ingo/fs/tempfile.vim autoload script
 "   - ingo/os.vim autoload script
 "
-" Copyright: (C) 2010-2018 Ingo Karkat
+" Copyright: (C) 2010-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
 "	008	25-Oct-2018	Add :Testing... commands for access to files
-"                               frequently used for testing.
+"				frequently used for testing.
 "	007	13-Sep-2018	Consistently define :...Fragment and :...Snip.
 "				Add :U... commands for my Unixhome.
 "	006	20-Jul-2018	On Windows, default for g:inboxDirspec should
-"                               consider I:\ (which would be mounted writable)
-"                               before (readonly) O:\inbox.
+"				consider I:\ (which would be mounted writable)
+"				before (readonly) O:\inbox.
 "	005	20-May-2018	ENH: Make :Inbox..., :Scratch... and :Temp...
-"                               accept numbered filename arguments and translate
-"                               them into the [count]'th newest file.
+"				accept numbered filename arguments and translate
+"				them into the [count]'th newest file.
 "	004	18-May-2018	Use new generic ingo#plugin#cmdcomplete#Make()
-"                               instead of
-"                               SpecialFileLocations#Inbox#Complete().
-"                               ENH: Perform newest-first sorting also for
-"                               :Temp... and :Scratch... commands; it's useful
-"                               there, too.
+"				instead of
+"				SpecialFileLocations#Inbox#Complete().
+"				ENH: Perform newest-first sorting also for
+"				:Temp... and :Scratch... commands; it's useful
+"				there, too.
 "	003	19-Apr-2018	Better default for g:inboxDirspec on Linux.
 "	002	02-Mar-2018	Compatibility: Need to explicitly load Funcrefs
-"                               in Vim 7.0/1.
+"				in Vim 7.0/1.
 "	001	30-Oct-2017	file creation from ingocommands.vim
 
 " Avoid installing twice or when in unsupported Vim version.
