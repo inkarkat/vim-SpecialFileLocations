@@ -1,13 +1,16 @@
 " SpecialFileLocations.vim: Various ways to access files from special locations.
 "
 " DEPENDENCIES:
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2017-2018 Ingo Karkat
+" Copyright: (C) 2017-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	003	29-Oct-2019	Adapt: ingomappings#PutRegisterContents() moved
+"				into ingo-library.
 "	002	25-Oct-2018	Add SpecialFileLocations#Yank().
 "	001	31-Oct-2017	file creation from ingocommands.vim
 
@@ -24,7 +27,7 @@ function! SpecialFileLocations#Yank( dirspec, filename, fileOptionsAndCommands )
     endif
 
     let l:filespec = ingo#escape#file#fnameunescape(a:dirspec . a:filename)
-    call ingomappings#PutRegisterContents('FilePath', l:filespec, 'v', '')
+    call ingo#plugin#register#PutContents('FilePath', l:filespec, 'v', '')
 endfunction
 
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
