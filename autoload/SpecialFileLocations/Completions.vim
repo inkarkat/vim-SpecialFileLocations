@@ -1,10 +1,7 @@
 " SpecialFileLocations/Completions.vim: Completions (and counted file access) for special file locations.
 "
 " DEPENDENCIES:
-"   - ingo/collections/memoized.vim autoload script
-"   - ingo/compat.vim autoload script
-"   - ingo/fs/path.vim autoload script
-"   - ingo/plugin/cmdcomplete.vim autoload script
+"   - ingo-library.vim plugin
 "
 " Copyright: (C) 2017-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
@@ -12,6 +9,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	006	15-Jul-2019	BUG: Newest file is also mistakenly used when
+"                               the passed {filespec} starts with a number.
+"                               Forgot anchoring to end.
 "	005	28-May-2019	BUG: Forgot to replace s:FtimeSort() with
 "                               ingo-library function.
 "	004	13-May-2019	Move s:FtimeSort() into ingo-library for reuse.
@@ -84,7 +84,7 @@ function! SpecialFileLocations#Completions#GetNewestFile( dirspec, count )
     return get(l:filesByFtime, a:count - 1, '')
 endfunction
 function! SpecialFileLocations#Completions#NewestFileProcessing( dirspec, filename, fileOptionsAndCommands )
-    return [(a:filename =~# '^\d\+' ?
+    return [(a:filename =~# '^\d\+$' ?
     \   SpecialFileLocations#Completions#GetNewestFile(a:dirspec, str2nr(a:filename)) :
     \   a:filename
     \), a:fileOptionsAndCommands]
