@@ -1,21 +1,17 @@
 " SpecialFileLocations.vim: Various ways to access files from special locations.
 "
 " DEPENDENCIES:
-"   - CommandCompleteDirForAction.vim autoload script
-"   - SpecialFileLocations/*.vim autoload scripts
-"   - ingo/compat/command.vim autoload script
-"   - ingo/err.vim autoload script
-"   - ingo/fs/path.vim autoload script
-"   - ingo/fs/path/split.vim autoload script
-"   - ingo/fs/tempfile.vim autoload script
-"   - ingo/os.vim autoload script
+"   - Requires Vim 7.0 or higher.
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2010-2019 Ingo Karkat
+" Copyright: (C) 2010-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	009	01-Mar-2020	Adapt: CommandCompleteDirForAction#setup() has
+"				moved into ingo-library.
 "	008	25-Oct-2018	Add :Testing... commands for access to files
 "				frequently used for testing.
 "	007	13-Sep-2018	Consistently define :...Fragment and :...Snip.
@@ -115,57 +111,57 @@ if v:version < 702
     runtime autoload/SpecialFileLocations/Vimfiles.vim
 endif
 
-call CommandCompleteDirForAction#setup('CEdit', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CEdit', '', {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#CdPath#GlobLookup')
 \})
-call CommandCompleteDirForAction#setup('Csplit', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Csplit', '', {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CSplit', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CSplit', '', {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CDrop', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CDrop', '', {
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CRevert', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CRevert', '', {
 \   'action': 'Revert',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CRead', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CRead', '', {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CReadFragment', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CReadFragment', '', {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CReadSnip', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CReadSnip', '', {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CSave', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CSave', '', {
 \   'commandAttributes': '-bang',
 \   'action': 'saveas<bang>',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
-call CommandCompleteDirForAction#setup('CWrite', '', {
+call ingo#plugin#cmdcomplete#dirforaction#setup('CWrite', '', {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
 \   'isIncludeSubdirs': 1,
@@ -174,47 +170,47 @@ call CommandCompleteDirForAction#setup('CWrite', '', {
 
 
 
-call CommandCompleteDirForAction#setup('RootEdit', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootEdit', function('SpecialFileLocations#Root#Dirspec'), {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('Rootsplit', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Rootsplit', function('SpecialFileLocations#Root#Dirspec'), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootSplit', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootSplit', function('SpecialFileLocations#Root#Dirspec'), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootDrop', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootDrop', function('SpecialFileLocations#Root#Dirspec'), {
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootRevert', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootRevert', function('SpecialFileLocations#Root#Dirspec'), {
 \   'action': 'Revert',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootRead', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootRead', function('SpecialFileLocations#Root#Dirspec'), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootReadFragment', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootReadFragment', function('SpecialFileLocations#Root#Dirspec'), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" ingo#fs#path#split#AtBasePath("%", SpecialFileLocations#Root#Dirspec())',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootReadSnip', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootReadSnip', function('SpecialFileLocations#Root#Dirspec'), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" ingo#fs#path#split#AtBasePath("%", SpecialFileLocations#Root#Dirspec())',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootSave', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootSave', function('SpecialFileLocations#Root#Dirspec'), {
 \   'commandAttributes': '-bang',
 \   'action': 'saveas<bang>',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('RootWrite', function('SpecialFileLocations#Root#Dirspec'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootWrite', function('SpecialFileLocations#Root#Dirspec'), {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
 \   'defaultFilename': '%',
@@ -224,56 +220,56 @@ call CommandCompleteDirForAction#setup('RootWrite', function('SpecialFileLocatio
 
 
 let s:TempCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:tempDirspec)
-call CommandCompleteDirForAction#setup('TempEdit', g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempEdit', g:tempDirspec, {
 \   'action': 'edit',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('Tempsplit',g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Tempsplit',g:tempDirspec, {
 \   'action': function('SpecialFileLocations#Above'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempSplit',g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempSplit',g:tempDirspec, {
 \   'action': function('SpecialFileLocations#Below'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempDrop', g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempDrop', g:tempDirspec, {
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempRevert',g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempRevert',g:tempDirspec, {
 \   'action': 'Revert',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempRead', g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempRead', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempReadFragment', g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempReadFragment', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempReadSnip', g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempReadSnip', g:tempDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('TempSave', g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempSave', g:tempDirspec, {
 \   'commandAttributes': '-bang',
 \   'action': function('SpecialFileLocations#Temp#Save'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#NewestFileProcessing'),
@@ -284,7 +280,7 @@ call CommandCompleteDirForAction#setup('TempSave', g:tempDirspec, {
 " Note: We cannot use SpecialFileLocations#Scratch#Write() here, as there's no way to pass on the
 " range. The only bit of functionality that we lose is the clearing of the name
 " of an unnamed buffer.
-call CommandCompleteDirForAction#setup('TempWrite', g:tempDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempWrite', g:tempDirspec, {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
 \   'defaultFilename': '%',
@@ -296,34 +292,34 @@ unlet! s:TempCompleteFuncref
 
 
 
-call CommandCompleteDirForAction#setup('TestingEdit', ingo#fs#path#Combine(g:testingDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingEdit', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('Testingsplit', ingo#fs#path#Combine(g:testingDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Testingsplit', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingSplit', ingo#fs#path#Combine(g:testingDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingSplit', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingDrop', ingo#fs#path#Combine(g:testingDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingDrop', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingSave', ingo#fs#path#Combine(g:testingDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingSave', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'commandAttributes': '-bang',
 \   'action': 'saveas<bang>',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingWrite', ingo#fs#path#Combine(g:testingDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingWrite', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('TestingYank', ingo#fs#path#Combine(g:testingDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingYank', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'action': function('SpecialFileLocations#Yank'),
 \   'isIncludeSubdirs': 1
 \})
@@ -331,7 +327,7 @@ call CommandCompleteDirForAction#setup('TestingYank', ingo#fs#path#Combine(g:tes
 
 
 let s:ScratchCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:scratchDirspec)
-call CommandCompleteDirForAction#setup('ScratchEdit', ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchEdit', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'edit',
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
@@ -339,7 +335,7 @@ call CommandCompleteDirForAction#setup('ScratchEdit', ingo#fs#path#Combine(g:scr
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('Scratchsplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Scratchsplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
@@ -347,7 +343,7 @@ call CommandCompleteDirForAction#setup('Scratchsplit',ingo#fs#path#Combine(g:scr
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('ScratchSplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchSplit',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
@@ -355,13 +351,13 @@ call CommandCompleteDirForAction#setup('ScratchSplit',ingo#fs#path#Combine(g:scr
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('ScratchDrop', ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchDrop', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'isIncludeSubdirs': 1,
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('ScratchRevert',ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchRevert',ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'Revert',
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
@@ -369,27 +365,27 @@ call CommandCompleteDirForAction#setup('ScratchRevert',ingo#fs#path#Combine(g:sc
 \   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('ScratchRead', ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchRead', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('ScratchReadFragment', ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchReadFragment', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:ScratchCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('ScratchReadSnip', ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchReadSnip', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('ScratchSource', ingo#fs#path#Combine(g:scratchDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchSource', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'source',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Scratch#NewestFileProcessing'),
 \   'browsefilter': '*.vim',
@@ -406,41 +402,41 @@ unlet! s:ScratchCompleteFuncref
 
 
 
-call CommandCompleteDirForAction#setup('UEdit', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('UEdit', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('Usplit',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Usplit',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('USplit',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('USplit',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('UDrop', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('UDrop', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('URevert',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('URevert',ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'action': 'Revert',
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('URead', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('URead', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('UReadFragment', g:unixhomeDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('UReadFragment', g:unixhomeDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('UReadSnip', g:unixhomeDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('UReadSnip', g:unixhomeDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
 \   'isIncludeSubdirs': 1,
 \})
-call CommandCompleteDirForAction#setup('USource', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('USource', ingo#fs#path#Combine(g:unixhomeDirspec, ''), {
 \   'action': 'source',
 \   'browsefilter': '*.vim',
 \   'isIncludeSubdirs': 1,
@@ -452,56 +448,56 @@ command! -bar -bang    -range=% -nargs=? UWrite if ! SpecialFileLocations#Scratc
 
 
 let s:InboxCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:inboxDirspec)
-call CommandCompleteDirForAction#setup('InboxEdit', ingo#fs#path#Combine(g:inboxDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxEdit', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'edit',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('Inboxsplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Inboxsplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('InboxSplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxSplit',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('InboxDrop', ingo#fs#path#Combine(g:inboxDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxDrop', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('InboxRevert',ingo#fs#path#Combine(g:inboxDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxRevert',ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'Revert',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('InboxRead', ingo#fs#path#Combine(g:inboxDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxRead', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('InboxReadFragment', g:inboxDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxReadFragment', g:inboxDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('InboxReadSnip', g:inboxDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxReadSnip', g:inboxDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-call CommandCompleteDirForAction#setup('InboxSource', ingo#fs#path#Combine(g:inboxDirspec, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('InboxSource', ingo#fs#path#Combine(g:inboxDirspec, ''), {
 \   'action': 'source',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Inbox#NewestFileProcessing'),
 \   'browsefilter': '*.vim',
@@ -515,13 +511,13 @@ unlet! s:InboxCompleteFuncref
 
 
 
-call CommandCompleteDirForAction#setup('Logbook', g:logbookDirspec, {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Logbook', g:logbookDirspec, {
 \   'isIncludeSubdirs': 1,
 \   'defaultFilename': g:logbookDefaultFilename,
 \   'postAction': 'if &l:filetype !=# "logbook" | setfiletype logbook | endif',
 \   'browsefilter': '*.txt'
 \})
-call CommandCompleteDirForAction#setup('LogbookInstall', ingo#fs#path#Combine(g:logbookDirspec, 'install', ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('LogbookInstall', ingo#fs#path#Combine(g:logbookDirspec, 'install', ''), {
 \   'isIncludeSubdirs': 0,
 \   'defaultFilename': tolower(hostname()) . '.txt',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Logbook#InstallLogbookFilename'),
@@ -531,20 +527,20 @@ call CommandCompleteDirForAction#setup('LogbookInstall', ingo#fs#path#Combine(g:
 
 
 
-let SpecialFileLocations#Vimfiles#completeVimFunction = CommandCompleteDirForAction#setup('Vim',
+let SpecialFileLocations#Vimfiles#completeVimFunction = ingo#plugin#cmdcomplete#dirforaction#setup('Vim',
 \   get(filter(['~/Unixhome/.vim/', '~/.vim/', '~/vimfiles/'], 'isdirectory(expand(v:val))'), 0, './'),
 \{
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#Vimfiles#Complete',
 \   'FilespecProcessingFunction': function('SpecialFileLocations#Vimfiles#CompleteProcessing')
 \})
-call CommandCompleteDirForAction#setup('Pack', function('SpecialFileLocations#Vimfiles#GetPackRootDirspecs'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Pack', function('SpecialFileLocations#Vimfiles#GetPackRootDirspecs'), {
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('Packfile', function('SpecialFileLocations#Vimfiles#GetPackDirspecs'), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('Packfile', function('SpecialFileLocations#Vimfiles#GetPackDirspecs'), {
 \   'isIncludeSubdirs': 1
 \})
-call CommandCompleteDirForAction#setup('VimRuntime', ingo#fs#path#Combine($VIMRUNTIME, ''), {
+call ingo#plugin#cmdcomplete#dirforaction#setup('VimRuntime', ingo#fs#path#Combine($VIMRUNTIME, ''), {
 \   'isIncludeSubdirs': 1
 \})
 
