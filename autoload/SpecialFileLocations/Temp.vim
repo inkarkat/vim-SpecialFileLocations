@@ -5,13 +5,17 @@
 "   - ingo/err.vim autoload script
 "   - ingo/escape/file.vim autoload script
 "
-" Copyright: (C) 2017 Ingo Karkat
+" Copyright: (C) 2017-2018 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	002	20-May-2018	ENH: Allow count-based selection of temp files
+"                               via a FilenameProcessingFunction.
 "	001	30-Oct-2017	file creation from ingocommands.vim
+let s:save_cpo = &cpo
+set cpo&vim
 
 function! SpecialFileLocations#Temp#Save( dirspec, filename, fileOptionsAndCommands )
     " By delegating to SpecialFileLocations#Scratch#Save(), we get the handling
@@ -21,8 +25,16 @@ function! SpecialFileLocations#Temp#Save( dirspec, filename, fileOptionsAndComma
 	throw ingo#err#Get()
     endif
 endfunction
+function! SpecialFileLocations#Temp#NewestFileProcessing( filename, fileOptionsAndCommands )
+    return SpecialFileLocations#Completions#NewestFileProcessing(g:tempDirspec, a:filename, a:fileOptionsAndCommands)
+endfunction
 function! SpecialFileLocations#Temp#Filename( filename, fileOptionsAndCommands )
-    return [(empty(a:filename) ? strftime(g:scratchFilenameTemplate.unnamed) : a:filename), a:fileOptionsAndCommands]
+    return (empty(a:filename) ?
+    \   [strftime(g:scratchFilenameTemplate.unnamed), a:fileOptionsAndCommands] :
+    \   SpecialFileLocations#Temp#NewestFileProcessing(a:filename, a:fileOptionsAndCommands)
+    \)
 endfunction
 
+let &cpo = s:save_cpo
+unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
