@@ -3,12 +3,19 @@
 " DEPENDENCIES:
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2017-2019 Ingo Karkat
+" Copyright: (C) 2017-2020 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	007	03-Mar-2020	FIX:
+"				SpecialFileLocations#Completions#MakeForNewestFirst()
+"				always resolves other absolute directories, but
+"				not all special file locations support this
+"				(only scratch does, inbox and temp do not). Add
+"				optional a:isAllowOtherDirs argument and pass on
+"				to completion implementation.
 "	006	15-Jul-2019	BUG: Newest file is also mistakenly used when
 "                               the passed {filespec} starts with a number.
 "                               Forgot anchoring to end.
@@ -37,7 +44,7 @@
 let s:save_cpo = &cpo
 set cpo&vim
 
-function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, ArgLead, CmdLine, CursorPos )
+function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, isAllowOtherDirs, ArgLead, CmdLine, CursorPos )
     " Complete first files from a:dirspec for the {filename} argument (sorted by
     " file modification date descending), then any path- and filespec from the
     " CWD for {dir} and {filespec}.
@@ -54,16 +61,20 @@ function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, Arg
     \               'strpart(isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val, len(l:dirspecPrefix))'
     \           )
     \       ) +
-    \       map(
-    \           ingo#compat#glob(a:ArgLead . '*', 0, 1),
-    \           'isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val'
+    \       (a:isAllowOtherDirs ?
+    \           map(
+    \               ingo#compat#glob(a:ArgLead . '*', 0, 1),
+    \               'isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val'
+    \           ):
+    \           []
     \       ),
     \       'ingo#compat#fnameescape(v:val)'
     \   )
 endfunction
-function! SpecialFileLocations#Completions#MakeForNewestFirst( dirspec )
+function! SpecialFileLocations#Completions#MakeForNewestFirst( dirspec, ... )
+    let l:isAllowOtherDirs = (a:0 && a:1)
     return ingo#plugin#cmdcomplete#MakeCompleteFunc(
-    \   printf('return SpecialFileLocations#Completions#DirspecNewestFilesFirst(%s, a:ArgLead, a:CmdLine, a:CursorPos)', string(a:dirspec))
+    \   printf('return SpecialFileLocations#Completions#DirspecNewestFilesFirst(%s, %d, a:ArgLead, a:CmdLine, a:CursorPos)', string(a:dirspec), l:isAllowOtherDirs)
     \)
 endfunction
 
