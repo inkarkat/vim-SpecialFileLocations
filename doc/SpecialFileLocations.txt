@@ -30,7 +30,8 @@ RELATED WORKS								     *
 
 ==============================================================================
 USAGE						  *SpecialFileLocations-usage*
-			      *:CEdit* *:Csplit* *:CSplit* *:CDrop* *:CRevert*
+		       *:Ccd* *:CEdit* *:Csplit* *:CSplit* *:CDrop* *:CRevert*
+:CCd {dir}		Change the current directory to {dir} ...
 :CEdit {file}		Edit {file} ...
 :Csplit {file}		Edit {file} in a split (above) buffer...
 :CSplit {file}		Edit {file} in a split (below) buffer...
@@ -49,7 +50,8 @@ USAGE						  *SpecialFileLocations-usage*
 :[range]CWrite[!] [{file}]
 
 
-	       *:RootEdit* *:Rootsplit* *:RootSplit* *:RootDrop* *:RootRevert*
+     *:RootCd* *:RootEdit* *:Rootsplit* *:RootSplit* *:RootDrop* *:RootRevert*
+:RootCd {dir}		Change the current directory to project {dir} ...
 :RootEdit {file}	Edit project {file} ...
 :Rootsplit {file}	Edit project {file} in a split (above) buffer...
 :RootSplit {file}	Edit project {file} in a split (below) buffer...
@@ -71,7 +73,8 @@ USAGE						  *SpecialFileLocations-usage*
 			subdirectories.
 
 
-	       *:TempEdit* *:Tempsplit* *:TempSplit* *:TempDrop* *:TempRevert*
+     *:TempCd* *:TempEdit* *:Tempsplit* *:TempSplit* *:TempDrop* *:TempRevert*
+:TempCd {dir}		Change the current directory to {dir} ...
 :TempEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
 			are not counted)) ...
 :Tempsplit {file}|N	Edit {file} in a split (above) buffer...
@@ -94,11 +97,14 @@ USAGE						  *SpecialFileLocations-usage*
 			subdirectories.
 
 
-		 *:TestingEdit* *:Testingsplit* *:TestingSplit* *:TestingDrop*
+    *:TestingCd* *:TestingEdit* *:Testingsplit* *:TestingSplit* *:TestingDrop*
+:Testing Cd {dir}	Change the current directory to testing {dir} ...
 :TestingEdit {file}	Edit testing {file} ...
 :Testingsplit {file}	Edit testing {file} in a split (above) buffer...
 :TestingSplit {file}	Edit testing {file} in a split (below) buffer...
 :TestingDrop {file}	Drop testing {file} ...
+			... from the testing directory or one of its
+			subdirectories.
 						*:TestingSave* *:TestingWrite*
 :TestingSave[!] [{file}]
 :[range]TestingWrite[!] [{file}]
@@ -108,14 +114,15 @@ USAGE						  *SpecialFileLocations-usage*
 			register and the system clipboard.
 
 
-*:ScratchEdit* *:Scratchsplit* *:ScratchSplit* *:ScratchDrop* *:ScratchRevert*
+*:ScratchCd* *:ScratchEdit* *:Scratchsplit* *:ScratchSplit* *:ScratchDrop* *:ScratchRevert*
+:ScratchCd {dir}	Change the current directory to {dir} ...
 :ScratchEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
-			are not counted)) from the default g:scratchDirspec.
-:Scratchsplit {file}|N	Edit {file} in a split (above) buffer.
-:ScratchSplit {file}|N	Edit {file} in a split (below) buffer.
-:ScratchDrop {file}|N	Drop {file} from the default g:scratchDirspec.
-:ScratchRevert {file}|N	Revert the current buffer to the contents of {file}
-			from the default g:scratchDirspec.
+			are not counted)) ...
+:Scratchsplit {file}|N	Edit {file} in a split (above) buffer...
+:ScratchSplit {file}|N	Edit {file} in a split (below) buffer...
+:ScratchDrop {file}|N	Drop {file} ...
+:ScratchRevert {file}|N	Revert the current buffer to the contents of {file} ...
+			... from the default g:scratchDirspec.
 		    *:ScratchRead*   *:ScratchReadFragment* *:ScratchReadSnip*
 :[line]ScratchRead {file}|N
 			Read {file} from the default g:scratchDirspec.
@@ -169,14 +176,15 @@ USAGE						  *SpecialFileLocations-usage*
 			Like |:ScratchSave| without the saving.
 
 
-			      *:UEdit* *:Usplit* *:USplit* *:UDrop* *:URevert*
+		       *:UCd* *:UEdit* *:Usplit* *:USplit* *:UDrop* *:URevert*
+:UCd {dir}		Change the current directory to {dir} ...
 :UEdit {file}|N		Edit {file} (or the N'th newest file (subdirectories
-			are not counted)) from the default g:unixhomeDirspec.
-:Usplit {file}|N	Edit {file} in a split (above) buffer.
-:USplit {file}|N	Edit {file} in a split (below) buffer.
-:UDrop {file}|N		Drop {file} from the default g:unixhomeDirspec.
+			are not counted)) ...
+:Usplit {file}|N	Edit {file} in a split (above) buffer...
+:USplit {file}|N	Edit {file} in a split (below) buffer...
+:UDrop {file}|N		Drop {file} ...
 :URevert {file}|N	Revert the current buffer to the contents of {file}
-			from the default g:unixhomeDirspec.
+			... from the default g:unixhomeDirspec.
 		     *:URead* *:UReadFragment* *:UReadSnip* *:USource* *:UNew*
 :[line]URead {file}|N
 			Read {file} from the default g:unixhomeDirspec.
@@ -201,14 +209,15 @@ USAGE						  *SpecialFileLocations-usage*
 			(if possible, inside g:unixhomeDirspec).
 
 
-	  *:InboxEdit* *:Inboxsplit* *:InboxSplit* *:InboxDrop* *:InboxRevert*
+*:InboxCd* *:InboxEdit* *:Inboxsplit* *:InboxSplit* *:InboxDrop* *:InboxRevert*
+:InboxCd {dir}		Change the current directory to {dir} ...
 :InboxEdit {file}|N	Edit {file} (or the N'th newest file (subdirectories
-			are not counted)) from the default g:inboxDirspec.
-:Inboxsplit {file}|N	Edit {file} in a split (above) buffer.
-:InboxSplit {file}|N	Edit {file} in a split (below) buffer.
-:InboxDrop {file}|N	Drop {file} from the default g:inboxDirspec.
+			are not counted)) ...
+:Inboxsplit {file}|N	Edit {file} in a split (above) buffer...
+:InboxSplit {file}|N	Edit {file} in a split (below) buffer...
+:InboxDrop {file}|N	Drop {file} ...
 :InboxRevert {file}|N	Revert the current buffer to the contents of {file}
-			from the default g:inboxDirspec.
+			... from the default g:inboxDirspec.
  *:InboxRead* *:InboxReadFragment* *:InboxReadSnip* *:InboxSource* *:InboxNew*
 :[line]InboxRead {file}|N
 			Read {file} from the default g:inboxDirspec.
