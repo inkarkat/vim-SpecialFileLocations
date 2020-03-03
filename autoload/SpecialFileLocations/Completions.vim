@@ -49,27 +49,23 @@ function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, isA
     " file modification date descending), then any path- and filespec from the
     " CWD for {dir} and {filespec}.
     let l:dirspecPrefix = glob(ingo#fs#path#Combine(a:dirspec, ''))
-    return
-    \   map(
-    \       (! empty(a:ArgLead) && ingo#fs#path#IsAbsolute(a:ArgLead) ?
-    \           [] :
-    \           map(
-    \               sort(
-    \                   ingo#compat#glob(ingo#fs#path#Combine(a:dirspec, a:ArgLead . '*'), 0, 1),
-    \                   'ingo#collections#FileModificationTimeSort'
-    \               ),
-    \               'strpart(isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val, len(l:dirspecPrefix))'
-    \           )
-    \       ) +
-    \       (a:isAllowOtherDirs ?
-    \           map(
-    \               ingo#compat#glob(a:ArgLead . '*', 0, 1),
-    \               'isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val'
-    \           ):
-    \           []
-    \       ),
-    \       'ingo#compat#fnameescape(v:val)'
-    \   )
+    let l:filespecs = []
+    if empty(a:ArgLead) || ! ingo#fs#path#IsAbsolute(a:ArgLead)
+	let l:filespecs += map(
+	\   sort(
+	\       ingo#compat#glob(ingo#fs#path#Combine(a:dirspec, a:ArgLead . '*'), 0, 1),
+	\       'ingo#collections#FileModificationTimeSort'
+	\   ),
+	\   'strpart(isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val, len(l:dirspecPrefix))'
+	\)
+    endif
+    if a:isAllowOtherDirs
+	let l:filespecs += map(
+	\   ingo#compat#glob(a:ArgLead . '*', 0, 1),
+	\   'isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val'
+	\)
+    endif
+    return map(l:filespecs, 'ingo#compat#fnameescape(v:val)')
 endfunction
 function! SpecialFileLocations#Completions#MakeForNewestFirst( dirspec, ... )
     let l:isAllowOtherDirs = (a:0 && a:1)
