@@ -326,7 +326,12 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('TestingYank', ingo#fs#path#Comb
 
 
 
-let s:ScratchCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:scratchDirspec)
+let s:ScratchCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:scratchDirspec, 1)
+call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchCd', ingo#fs#path#Combine(g:scratchDirspec, ''), {
+\   'action': 'chdir',
+\   'isIncludeSubdirs': 1,
+\   'isAllowOtherDirs': 1
+\})
 call ingo#plugin#cmdcomplete#dirforaction#setup('ScratchEdit', ingo#fs#path#Combine(g:scratchDirspec, ''), {
 \   'action': 'edit',
 \   'postAction': function('SpecialFileLocations#Scratch#MakeScratchy'),
