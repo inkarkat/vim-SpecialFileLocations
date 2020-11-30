@@ -10,6 +10,9 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	011	15-Mar-2020	:Vim needs 'isAllowOtherDirs' for ../.[g]vimrc
+"				now because it now enforces that the location is
+"				inside the base dir.
 "	010	04-Mar-2020	FIX: Several FilenameProcessingFunction
 "				definitions were missing (especially for :*Drop
 "				commands).
@@ -577,6 +580,7 @@ let g:SpecialFileLocations#Vimfiles#completeVimFunction = ingo#plugin#cmdcomplet
 \   get(filter(['~/Unixhome/.vim/', '~/.vim/', '~/vimfiles/'], 'isdirectory(expand(v:val))'), 0, './'),
 \{
 \   'isIncludeSubdirs': 1,
+\   'isAllowOtherDirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#Vimfiles#Complete',
 \   'FilespecProcessingFunction': function('SpecialFileLocations#Vimfiles#CompleteProcessing')
 \})
