@@ -10,6 +10,8 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	012	01-Dec-2020	Also complete newest files first for :Logbook
+"				and :LogbookInstall.
 "	011	15-Mar-2020	:Vim needs 'isAllowOtherDirs' for ../.[g]vimrc
 "				now because it now enforces that the location is
 "				inside the base dir.
@@ -560,18 +562,22 @@ unlet! s:InboxCompleteFuncref
 
 
 
+let s:LogbookCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(g:logbookDirspec)
 call ingo#plugin#cmdcomplete#dirforaction#setup('Logbook', g:logbookDirspec, {
 \   'isIncludeSubdirs': 1,
 \   'defaultFilename': g:logbookDefaultFilename,
 \   'postAction': 'if &l:filetype !=# "logbook" | setfiletype logbook | endif',
-\   'browsefilter': '*.txt'
+\   'browsefilter': '*.txt',
+\   'overrideCompleteFunction': s:LogbookCompleteFuncref
 \})
+let s:LogbookInstallCompleteFuncref = SpecialFileLocations#Completions#MakeForNewestFirst(ingo#fs#path#Combine(g:logbookDirspec, 'install', ''))
 call ingo#plugin#cmdcomplete#dirforaction#setup('LogbookInstall', ingo#fs#path#Combine(g:logbookDirspec, 'install', ''), {
 \   'isIncludeSubdirs': 0,
 \   'defaultFilename': tolower(hostname()) . '.txt',
 \   'FilenameProcessingFunction': function('SpecialFileLocations#Logbook#InstallLogbookFilename'),
 \   'postAction': 'if &l:filetype !=# "logbook" | setfiletype logbook | endif',
-\   'browsefilter': '*.txt'
+\   'browsefilter': '*.txt',
+\   'overrideCompleteFunction': s:LogbookInstallCompleteFuncref
 \})
 
 
