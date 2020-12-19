@@ -9,6 +9,13 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	008	04-Mar-2020	FIX:
+"				SpecialFileLocations#Completions#DirspecNewestFilesFirst()
+"				offers files from a:dirspec twice when the CWD
+"				is a:dirspec. Actually, the two completion
+"				sources (with absolute ArgLead or not) are
+"				mutually exclusive. Break up the huge nested
+"				ternary operator to clear things up.
 "	007	03-Mar-2020	FIX:
 "				SpecialFileLocations#Completions#MakeForNewestFirst()
 "				always resolves other absolute directories, but
@@ -49,21 +56,23 @@ function! SpecialFileLocations#Completions#DirspecNewestFilesFirst( dirspec, isA
     " file modification date descending), then any path- and filespec from the
     " CWD for {dir} and {filespec}.
     let l:dirspecPrefix = glob(ingo#fs#path#Combine(a:dirspec, ''))
-    let l:filespecs = []
-    if empty(a:ArgLead) || ! ingo#fs#path#IsAbsolute(a:ArgLead)
-	let l:filespecs += map(
+    let l:hasAbsoluteArgLead = (! empty(a:ArgLead) && ingo#fs#path#IsAbsolute(a:ArgLead))
+
+    if ! l:hasAbsoluteArgLead
+	let l:filespecs = map(
 	\   sort(
 	\       ingo#compat#glob(ingo#fs#path#Combine(a:dirspec, a:ArgLead . '*'), 0, 1),
 	\       'ingo#collections#FileModificationTimeSort'
 	\   ),
 	\   'strpart(isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val, len(l:dirspecPrefix))'
 	\)
-    endif
-    if a:isAllowOtherDirs
-	let l:filespecs += map(
+    elseif a:isAllowOtherDirs
+	let l:filespecs = map(
 	\   ingo#compat#glob(a:ArgLead . '*', 0, 1),
 	\   'isdirectory(v:val) ? ingo#fs#path#Combine(v:val, "") : v:val'
 	\)
+    else
+	let l:filespecs = []
     endif
     return map(l:filespecs, 'ingo#compat#fnameescape(v:val)')
 endfunction
