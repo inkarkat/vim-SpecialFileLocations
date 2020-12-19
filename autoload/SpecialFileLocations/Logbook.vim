@@ -8,7 +8,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
-"	001	30-Oct-2017	file creation
+"	001	30-Oct-2017	file creation from ingocommands.vim
 
 function! SpecialFileLocations#Logbook#InstallLogbookFilename( filename, fileOptionsAndCommands )
     return [(a:filename =~# '\.txt$' ? a:filename : a:filename . '.txt'), a:fileOptionsAndCommands]
