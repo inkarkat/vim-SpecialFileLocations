@@ -1,17 +1,18 @@
 " SpecialFileLocations/Scratch.vim: File locations in scratch directory.
 "
 " DEPENDENCIES:
-"   - ingo/compat.vim autoload script
-"   - ingo/err.vim autoload script
-"   - ingo/fs/path.vim autoload script
-"   - ingo/plugin/setting.vim autoload script
+"   - ingo-library.vim plugin
 "
-" Copyright: (C) 2017-2018 Ingo Karkat
+" Copyright: (C) 2017-2019 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	005	15-Jul-2019	If the passed filespec starts with ./, write the
+"                               scratch file to the current directory, not to the
+"                               default one (even with an ugly
+"                               ~/Ablage/./name.txt path).
 "	004	20-May-2018	ENH: Allow count-based selection of scratch
 "                               files via a FilenameProcessingFunction, and by
 "                               incorporating the lookup into
@@ -48,7 +49,7 @@ function! s:ScratchFilespec( scratchFilenameTemplate, scratchDirspec, scratchBuf
 	return ingo#compat#fnameescape(ingo#fs#path#Combine(a:scratchDirspec, l:scratchFilespec))
     elseif isdirectory(a:filespec)
 	return ingo#fs#path#Combine(a:filespec, ingo#compat#fnameescape(l:scratchFilespec))
-    elseif fnamemodify(a:filespec, ':h') ==# '.' || isdirectory(ingo#fs#path#Combine(a:scratchDirspec, fnamemodify(a:filespec, ':h')))
+    elseif ingo#fs#path#Normalize(a:filespec, '/') !~# '^\./' && (fnamemodify(a:filespec, ':h') ==# '.' || isdirectory(ingo#fs#path#Combine(a:scratchDirspec, fnamemodify(a:filespec, ':h'))))
 	return ingo#fs#path#Combine(ingo#compat#fnameescape(a:scratchDirspec), s:InsertTimeAndFormat(a:scratchFilenameTemplate.given, a:filespec))
     else
 	return a:filespec
