@@ -10,6 +10,7 @@
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
 "
 " REVISION	DATE		REMARKS
+"	013	13-Dec-2020	Adapt: Move from Dropbox to Nextcloud.
 "	012	01-Dec-2020	Also complete newest files first for :Logbook
 "				and :LogbookInstall.
 "	011	15-Mar-2020	:Vim needs 'isAllowOtherDirs' for ../.[g]vimrc
@@ -99,7 +100,7 @@ if ! exists('g:inboxFilenameTemplate')
     \}
 endif
 if ! exists('g:logbookDirspec')
-    let g:logbookDirspec = ingo#fs#path#Combine($HOME, 'Dropbox', 'logbooks', '')
+    let g:logbookDirspec = ingo#fs#path#Combine($HOME, 'cloud', 'logbooks', '')
 endif
 if ! exists('g:logbookDefaultFilename')
     let g:logbookDefaultFilename = 'personal.txt'
