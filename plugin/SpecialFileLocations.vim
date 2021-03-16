@@ -466,45 +466,55 @@ command! -bar -bang    -range=% -nargs=? UWrite if ! SpecialFileLocations#Scratc
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaCd', ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'action': 'chdir',
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaEdit', ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'action': 'edit',
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('Mediasplit',ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'action': function('SpecialFileLocations#Above'),
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaSplit',ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'action': function('SpecialFileLocations#Below'),
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaDrop', ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaRevert',ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'action': 'Revert',
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaRead', ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read',
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaReadFragment', g:mediaDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Fragment" "%:t"',
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaReadSnip', g:mediaDirspec, {
 \   'commandAttributes': '-range=-1',
 \   'action': '<line1>read % | execute "Snip" "%:t"',
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 call ingo#plugin#cmdcomplete#dirforaction#setup('MediaSource', ingo#fs#path#Combine(g:mediaDirspec, ''), {
 \   'action': 'source',
 \   'browsefilter': '*.vim',
 \   'isIncludeSubdirs': 1,
+\   'completeFunctionHook': function('SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook'),
 \})
 
 

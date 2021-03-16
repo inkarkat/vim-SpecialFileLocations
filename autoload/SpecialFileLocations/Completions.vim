@@ -65,6 +65,29 @@ function! SpecialFileLocations#Completions#NewestFileProcessing( dirspec, filena
     \), a:fileOptionsAndCommands]
 endfunction
 
+
+function! s:IsEmptyMediaDirectory( filespec ) abort
+    if ! isdirectory(a:filespec)
+	return 0
+    endif
+
+    let l:subdir = ingo#fs#path#split#AtBasePath(a:filespec, g:mediaDirspec)
+    let [l:path, l:name] = ingo#fs#path#split#PathAndName(l:subdir, 0)
+    if empty(l:name)
+	" Original subdir had trailing slash, now do the real splitting.
+	let [l:path, l:name] = ingo#fs#path#split#PathAndName(l:path, 0)
+    endif
+    if l:path !=# '.'
+	" This isn't a first-level subdirectory.
+	return 0
+    endif
+
+    return empty(ingo#compat#glob(ingo#fs#path#Combine(a:filespec, '*'), 1, 1))
+endfunction
+function! SpecialFileLocations#Completions#NonEmptyMediaDirectoryHook( filespecs ) abort
+    return filter(a:filespecs, '! s:IsEmptyMediaDirectory(v:val)')
+endfunction
+
 let &cpo = s:save_cpo
 unlet s:save_cpo
 " vim: set ts=8 sts=4 sw=4 noexpandtab ff=unix fdm=syntax :
