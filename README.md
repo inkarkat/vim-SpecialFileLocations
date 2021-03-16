@@ -186,6 +186,25 @@ USAGE
                             unless it's prepended with "./"), or passed {filespec}
                             (if possible, inside g:unixhomeDirspec).
 
+    :MediaCd {dir}          Change the current directory to {dir} ...
+    :MediaEdit {file}|N     Edit {file} (or the N'th newest file (subdirectories
+                            are not counted)) ...
+    :Mediasplit {file}|N    Edit {file} in a split (above) buffer...
+    :MediaSplit {file}|N    Edit {file} in a split (below) buffer...
+    :MediaDrop {file}|N     Drop {file} ...
+    :MediaRevert {file}|N   Revert the current buffer to the contents of {file}
+                            ... from a mounted medium.
+
+    :[line]MediaRead {file}|N
+                            Read {file} from a mounted medium.
+    :[line]MediaReadFragment {file}|N
+                            :MediaRead and insert fragment formatting around the
+                            read contents.
+    :[line]MediaReadSnip {file}|N
+                            :MediaRead and insert snip formatting around the read
+                            contents.
+    :MediaSource {file}|N   Source {file} from a mounted medium.
+
     :InboxCd {dir}          Change the current directory to {dir} ...
     :InboxEdit {file}|N     Edit {file} (or the N'th newest file (subdirectories
                             are not counted)) ...

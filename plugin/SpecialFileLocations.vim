@@ -23,6 +23,9 @@ endif
 if ! exists('g:unixhomeDirspec')
     let g:unixhomeDirspec = ingo#fs#path#Combine($HOME, 'Unixhome')
 endif
+if ! exists('g:mediaDirspec')
+    let g:mediaDirspec = '/media/' . $USER
+endif
 if ! exists('g:unixhomeFilenameTemplate')
     let g:unixhomeFilenameTemplate = {
     \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
@@ -457,6 +460,52 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('USource', ingo#fs#path#Combine(
 command! -bar -count=0          -nargs=? UNew   if ! SpecialFileLocations#Scratch#Create(g:unixhomeFilenameTemplate, g:unixhomeDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
 command! -bar -bang             -nargs=? USave  if ! SpecialFileLocations#Scratch#Save(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
 command! -bar -bang    -range=% -nargs=? UWrite if ! SpecialFileLocations#Scratch#Write(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+
+
+
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaCd', ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'action': 'chdir',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaEdit', ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'action': 'edit',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('Mediasplit',ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'action': function('SpecialFileLocations#Above'),
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaSplit',ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'action': function('SpecialFileLocations#Below'),
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaDrop', ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaRevert',ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'action': 'Revert',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaRead', ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaReadFragment', g:mediaDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Fragment" "%:t"',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaReadSnip', g:mediaDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Snip" "%:t"',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('MediaSource', ingo#fs#path#Combine(g:mediaDirspec, ''), {
+\   'action': 'source',
+\   'browsefilter': '*.vim',
+\   'isIncludeSubdirs': 1,
+\})
 
 
 
