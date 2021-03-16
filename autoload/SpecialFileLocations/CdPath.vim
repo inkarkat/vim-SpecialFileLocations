@@ -1,17 +1,13 @@
 " SpecialFileLocations/CdPath.vim: File locations based on 'cdpath'.
 "
 " DEPENDENCIES:
+"   - ingo-library.vim plugin
 "   - ingoaliases.vim plugin
 "
-" Copyright: (C) 2017-2020 Ingo Karkat
+" Copyright: (C) 2017-2021 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"	002	04-Mar-2020	Add SpecialFileLocations#CdPath#DirComplete()
-"				for new :CCd command.
-"	001	30-Oct-2017	file creation from ingocommands.vim
 
 function! SpecialFileLocations#CdPath#Glob( ArgLead )
     let l:nameGlob = (empty(a:ArgLead) ? '' : a:ArgLead . '*')

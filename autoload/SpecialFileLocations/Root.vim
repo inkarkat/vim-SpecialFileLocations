@@ -1,16 +1,13 @@
 " SpecialFileLocations/Root.vim: File locations relative to VCS root.
 "
 " DEPENDENCIES:
-"   - VcsRoot.vim autoload script
-"   - ingo/fs/path.vim autoload script
+"   - ingo-library.vim plugin
+"   - VcsRoot.vim plugin
 "
-" Copyright: (C) 2017 Ingo Karkat
+" Copyright: (C) 2017-2021 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"	001	30-Oct-2017	file creation from ingocommands.vim
 
 function! SpecialFileLocations#Root#Dirspec()
     let l:vcsRoot = VcsRoot#Root()

@@ -3,17 +3,10 @@
 " DEPENDENCIES:
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2017-2020 Ingo Karkat
+" Copyright: (C) 2017-2021 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"	003	03-Mar-2020	Adapt: g:CommandCompleteDirForAction_Context has
-"				been renamed after moving into the ingo-library.
-"	002	20-May-2018	ENH: Allow count-based selection of temp files
-"                               via a FilenameProcessingFunction.
-"	001	30-Oct-2017	file creation from ingocommands.vim
 let s:save_cpo = &cpo
 set cpo&vim
 

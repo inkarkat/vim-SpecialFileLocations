@@ -3,30 +3,10 @@
 " DEPENDENCIES:
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2017-2019 Ingo Karkat
+" Copyright: (C) 2017-2021 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
-"
-" REVISION	DATE		REMARKS
-"	005	15-Jul-2019	If the passed filespec starts with ./, write the
-"                               scratch file to the current directory, not to the
-"                               default one (even with an ugly
-"                               ~/Ablage/./name.txt path).
-"	004	20-May-2018	ENH: Allow count-based selection of scratch
-"                               files via a FilenameProcessingFunction, and by
-"                               incorporating the lookup into
-"                               SpecialFileLocations#Scratch#Write() and
-"                               SpecialFileLocations#Scratch#Save().
-"	003	18-May-2018	Remove SpecialFileLocations#Scratch#Complete();
-"                               I now use a generic implementation derived from
-"                               :Inbox... completion that already was almost
-"                               identical; it only sorted newest files first,
-"                               which is useful for :Scratch... commands, too.
-"	002	16-Nov-2017	Refactoring: Factor out
-"				s:UnscratchWithCommand().
-"				Add SpecialFileLocations#Scratch#Unscratch().
-"	001	30-Oct-2017	file creation from ingocommands.vim
 
 function! s:InsertTimeAndFormat( template, filespec )
     let l:filename = fnamemodify(a:filespec, ':r')
