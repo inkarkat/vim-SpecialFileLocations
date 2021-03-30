@@ -47,16 +47,7 @@ if ! exists('g:scratchFilenameTemplate')
     \}
 endif
 if ! exists('g:inboxDirspec')
-    if ingo#os#IsWinOrDos()
-	let g:inboxDirspec = 'I:\'
-
-	if ! isdirectory(g:inboxDirspec)
-	    let g:inboxDirspec = 'O:\inbox'
-	endif
-    else
-	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'public', 'inbox')
-    endif
-
+    let g:inboxDirspec = (ingo#os#IsWinOrDos() ? 'I:\' : '')
     if ! isdirectory(g:inboxDirspec)
 	let g:inboxDirspec = ingo#fs#path#Combine($HOME, 'inbox')
     endif
