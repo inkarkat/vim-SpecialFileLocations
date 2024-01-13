@@ -4,7 +4,7 @@
 "   - Requires Vim 7.0 or higher.
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2010-2021 Ingo Karkat
+" Copyright: (C) 2010-2024 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -54,6 +54,16 @@ if ! exists('g:inboxDirspec')
 endif
 if ! exists('g:inboxFilenameTemplate')
     let g:inboxFilenameTemplate = {
+    \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
+    \   'named': '%%s_%Y%m%d-%H%M%S',
+    \   'given': '%%s_%Y%m%d-%H%M%S',
+    \}
+endif
+if ! exists('g:cloudDirspec')
+    let g:cloudDirspec = ingo#fs#path#Combine($HOME, 'cloud', '')
+endif
+if ! exists('g:cloudFilenameTemplate')
+    let g:cloudFilenameTemplate = {
     \   'unnamed': 'untitled_%Y%m%d-%H%M%S',
     \   'named': '%%s_%Y%m%d-%H%M%S',
     \   'given': '%%s_%Y%m%d-%H%M%S',
@@ -576,6 +586,55 @@ command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocatio
 command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxSave  if ! SpecialFileLocations#Scratch#Save(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
 command! -bar -bang    -range=% -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxWrite if ! SpecialFileLocations#Scratch#Write(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
 unlet! s:InboxCompleteFuncref
+
+
+
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudCd', ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'action': 'chdir',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudEdit', ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'action': 'edit',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('Cloudsplit',ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'action': function('SpecialFileLocations#Above'),
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudSplit',ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'action': function('SpecialFileLocations#Below'),
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudDrop', ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudRevert',ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'action': 'Revert',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudRead', ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudReadFragment', g:cloudDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Fragment" "%:t"',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudReadSnip', g:cloudDirspec, {
+\   'commandAttributes': '-range=-1',
+\   'action': '<line1>read % | execute "Snip" "%:t"',
+\   'isIncludeSubdirs': 1,
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CloudSource', ingo#fs#path#Combine(g:cloudDirspec, ''), {
+\   'action': 'source',
+\   'browsefilter': '*.vim',
+\   'isIncludeSubdirs': 1,
+\})
+command! -bar -count=0          -nargs=? CloudNew   if ! SpecialFileLocations#Scratch#Create(g:cloudFilenameTemplate, g:cloudDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? CloudSave  if ! SpecialFileLocations#Scratch#Save(g:cloudFilenameTemplate, g:cloudDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang    -range=% -nargs=? CloudWrite if ! SpecialFileLocations#Scratch#Write(g:cloudFilenameTemplate, g:cloudDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
 
 
 

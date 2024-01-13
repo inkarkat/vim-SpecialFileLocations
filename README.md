@@ -236,6 +236,37 @@ USAGE
                             unless it's prepended with "./"), or passed {filespec}
                             (if possible, inside g:inboxDirspec).
 
+    :CloudCd {dir}          Change the current directory to {dir} ...
+    :CloudEdit {file}|N     Edit {file} (or the N'th newest file (subdirectories
+                            are not counted)) ...
+    :Cloudsplit {file}|N    Edit {file} in a split (above) buffer...
+    :CloudSplit {file}|N    Edit {file} in a split (below) buffer...
+    :CloudDrop {file}|N     Drop {file} ...
+    :CloudRevert {file}|N   Revert the current buffer to the contents of {file}
+                            ... from the default g:cloudDirspec.
+
+    :[line]CloudRead {file}|N
+                            Read {file} from the default g:cloudDirspec.
+    :[line]CloudReadFragment {file}|N
+                            :CloudRead and insert fragment formatting around the read
+                            contents.
+    :[line]CloudReadSnip {file}|N
+                            :CloudRead and insert snip formatting around the read
+                            contents.
+    :CloudSource {file}|N   Source {file} from the default g:cloudDirspec.
+    :[N]CloudNew [{dir}|{filename} |{filespec}]
+                            Create a :new buffer in the default g:cloudDirspec,
+                            or passed {dir}, or passed {filename} (in
+                            g:cloudDirspec), or passed {filespec}.
+
+    :CloudSave[!]  [{dir}|{filename} |{filespec} |N]
+    :[range]CloudWrite[!] [{dir}|{filename} |{filespec} |N]
+                            Persist a (cloud, or any) buffer to the default
+                            g:cloudDirspec, or passed {dir} (with the buffer's
+                            filename), or passed {filename} (in g:cloudDirspec,
+                            unless it's prepended with "./"), or passed {filespec}
+                            (if possible, inside g:cloudDirspec).
+
     :Logbook [{logbook}]    Open a chronological logbook file (ft=logbook) to read
                             or append an entry.
     :LogbookInstall [{hostname}]
@@ -325,7 +356,7 @@ First published version.
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2010-2021 Ingo Karkat -
+Copyright: (C) 2010-2024 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;
