@@ -5,7 +5,17 @@ _by Ingo Karkat_
 DESCRIPTION
 ------------------------------------------------------------------------------
 
-This plugin ...
+In real estate, it's all about location. Daily text editing tasks also
+frequently refer to certain files or directories. This plugin provides sets of
+file-related commands that parallel the built-in :cd, :edit, :split,
+:write, etc. (and also some useful custom ones for reverting or reading file
+contents with embellishments into the current buffer) while operating on files
+in certain, often-used prime locations.
+
+Addressing a file relative the project's root directory (as defined by the
+version control system)? Saving a copy to a scratch file to try out some crazy
+idea later? Editing the latest file from the temp directory? Or opening a
+particular Vim script? This plugin has you covered.
 
 ### SOURCE
 (Original Vim tip, Stack Overflow answer, ...)
@@ -307,6 +317,14 @@ To uninstall, use the :RmVimball command.
 - Requires Vim 7.0 or higher.
 - Requires the ingo-library.vim plugin ([vimscript #4433](http://www.vim.org/scripts/script.php?script_id=4433)), version 1.043 or
   higher.
+- The :Root... commands requires the VcsRoot.vim plugin (unreleased),
+  version 1.00 or higher.
+- The :C... commands require the ingoaliases.vim plugin (unreleased),
+  version 1.00 or higher.
+- The :Vim command requires the SidTools.vim plugin (unreleased),
+  version 1.00 or higher.
+- The :...Fragment commands require the Fragment.vim plugin (unreleased).
+- The :...Snip commands require the RangeSurround.vim plugin (unreleased).
 
 CONFIGURATION
 ------------------------------------------------------------------------------
