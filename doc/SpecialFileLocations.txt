@@ -48,6 +48,7 @@ USAGE						  *SpecialFileLocations-usage*
 			contents.
 :CSave[!] [{file}]
 :[range]CWrite[!] [{file}]
+			Persist buffer into one of the 'cdpath' directories.
 
 
      *:RootCd* *:RootEdit* *:Rootsplit* *:RootSplit* *:RootDrop* *:RootRevert*
@@ -314,7 +315,6 @@ USAGE						  *SpecialFileLocations-usage*
 :Packfile {vimfile}	Quickly edit a Vimscript from any package
 			(~/.vim/pack/**).
 :VimRuntime {vimfile}	Quickly edit a $VIMRUNTIME/** file.
-			Persist buffer into one of the 'cdpath' directories.
 
 ==============================================================================
 INSTALLATION				   *SpecialFileLocations-installation*

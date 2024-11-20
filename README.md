@@ -36,6 +36,7 @@ USAGE
                             contents.
     :CSave[!] [{file}]
     :[range]CWrite[!] [{file}]
+                            Persist buffer into one of the 'cdpath' directories.
 
     :RootCd {dir}           Change the current directory to project {dir} ...
     :RootEdit {file}        Edit project {file} ...
@@ -281,7 +282,6 @@ USAGE
     :Packfile {vimfile}     Quickly edit a Vimscript from any package
                             (~/.vim/pack/**).
     :VimRuntime {vimfile}   Quickly edit a $VIMRUNTIME/** file.
-                            Persist buffer into one of the 'cdpath' directories.
 
 INSTALLATION
 ------------------------------------------------------------------------------
