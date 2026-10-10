@@ -4,7 +4,7 @@
 "   - Requires Vim 7.0 or higher.
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2010-2024 Ingo Karkat
+" Copyright: (C) 2010-2026 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -161,6 +161,20 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('CWrite', '', {
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
 \})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CClone', '', {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>CloneAs',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#CdPath#GlobLookup'),
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('CSClone', '', {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>SCloneAs',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#CdPath#GlobLookup'),
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': 'SpecialFileLocations#CdPath#Complete'
+\})
 
 
 
@@ -211,6 +225,18 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('RootSave', function('SpecialFil
 call ingo#plugin#cmdcomplete#dirforaction#setup('RootWrite', function('SpecialFileLocations#Root#Dirspec'), {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
+\   'defaultFilename': '%',
+\   'isIncludeSubdirs': 1
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootClone', function('SpecialFileLocations#Root#Dirspec'), {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>CloneAs',
+\   'defaultFilename': '%',
+\   'isIncludeSubdirs': 1
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('RootSClone', function('SpecialFileLocations#Root#Dirspec'), {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>SCloneAs',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1
 \})
@@ -291,6 +317,22 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('TempWrite', g:tempDirspec, {
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:TempCompleteFuncref
 \})
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempClone', g:tempDirspec, {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>CloneAs',
+\   'defaultFilename': '%',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#Filename'),
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('TempSClone', g:tempDirspec, {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>SCloneAs',
+\   'defaultFilename': '%',
+\   'FilenameProcessingFunction': function('SpecialFileLocations#Temp#Filename'),
+\   'isIncludeSubdirs': 1,
+\   'overrideCompleteFunction': s:TempCompleteFuncref
+\})
 unlet! s:TempCompleteFuncref
 
 
@@ -323,6 +365,18 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('TestingSave', ingo#fs#path#Comb
 call ingo#plugin#cmdcomplete#dirforaction#setup('TestingWrite', ingo#fs#path#Combine(g:testingDirspec, ''), {
 \   'commandAttributes': '-bang -range=%',
 \   'action': '<line1>,<line2>write<bang>',
+\   'defaultFilename': '%',
+\   'isIncludeSubdirs': 1
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingClone', ingo#fs#path#Combine(g:testingDirspec, ''), {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>CloneAs',
+\   'defaultFilename': '%',
+\   'isIncludeSubdirs': 1
+\})
+call ingo#plugin#cmdcomplete#dirforaction#setup('TestingSClone', ingo#fs#path#Combine(g:testingDirspec, ''), {
+\   'commandAttributes': '-range=%',
+\   'action': '<line1>,<line2>SCloneAs',
 \   'defaultFilename': '%',
 \   'isIncludeSubdirs': 1
 \})
@@ -409,6 +463,8 @@ execute 'command! -bar -count=0          -nargs=? -complete=customlist,' . s:Scr
 execute 'command! -bar -count=0          -nargs=? -complete=customlist,' . s:ScratchCompleteFuncref "ScratchCreate    if ! SpecialFileLocations#Scratch#Create(g:scratchFilenameTemplate, g:scratchDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif"
 execute 'command! -bar -bang             -nargs=? -complete=customlist,' . s:ScratchCompleteFuncref "ScratchSave      if ! SpecialFileLocations#Scratch#Save(g:scratchFilenameTemplate, g:scratchDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif"
 execute 'command! -bar -bang    -range=% -nargs=? -complete=customlist,' . s:ScratchCompleteFuncref "ScratchWrite     if ! SpecialFileLocations#Scratch#Write(g:scratchFilenameTemplate, g:scratchDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif"
+execute 'command! -bar          -range=% -nargs=? -complete=customlist,' . s:ScratchCompleteFuncref "ScratchClone     if ! SpecialFileLocations#Scratch#Clone(g:scratchFilenameTemplate, g:scratchDirspec, 0, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif"
+execute 'command! -bar          -range=% -nargs=? -complete=customlist,' . s:ScratchCompleteFuncref "ScratchSClone    if ! SpecialFileLocations#Scratch#Clone(g:scratchFilenameTemplate, g:scratchDirspec, 1, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif"
 command! -nargs=* -complete=command ScratchIt if !empty(<q-args>)&&!&ma<Bar><Bar>&ro<Bar>call setline('.', getline('.'))<Bar>endif<Bar>if ! SpecialFileLocations#Scratch#It(<q-args>) | echoerr ingo#err#Get() | endif
 execute 'command! -bar                   -nargs=? -complete=customlist,' . s:ScratchCompleteFuncref 'Unscratch        if ! SpecialFileLocations#Scratch#Unscratch(g:scratchFilenameTemplate, g:scratchDirspec, <q-args>) | echoerr ingo#err#Get() | endif'
 unlet! s:ScratchCompleteFuncref
@@ -458,9 +514,11 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('USource', ingo#fs#path#Combine(
 \   'browsefilter': '*.vim',
 \   'isIncludeSubdirs': 1,
 \})
-command! -bar -count=0          -nargs=? UNew   if ! SpecialFileLocations#Scratch#Create(g:unixhomeFilenameTemplate, g:unixhomeDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang             -nargs=? USave  if ! SpecialFileLocations#Scratch#Save(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang    -range=% -nargs=? UWrite if ! SpecialFileLocations#Scratch#Write(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -count=0          -nargs=? UNew       if ! SpecialFileLocations#Scratch#Create(g:unixhomeFilenameTemplate, g:unixhomeDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? USave      if ! SpecialFileLocations#Scratch#Save(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang    -range=% -nargs=? UWrite     if ! SpecialFileLocations#Scratch#Write(g:unixhomeFilenameTemplate, g:unixhomeDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? UClone     if ! SpecialFileLocations#Scratch#Clone(g:unixhomeFilenameTemplate, g:unixhomeDirspec, 0, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? USClone    if ! SpecialFileLocations#Scratch#Clone(g:unixhomeFilenameTemplate, g:unixhomeDirspec, 1, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
 
 
 
@@ -582,9 +640,11 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('InboxSource', ingo#fs#path#Comb
 \   'isIncludeSubdirs': 1,
 \   'overrideCompleteFunction': s:InboxCompleteFuncref
 \})
-command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxNew   if ! SpecialFileLocations#Scratch#Create(g:inboxFilenameTemplate, g:inboxDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxSave  if ! SpecialFileLocations#Scratch#Save(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang    -range=% -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxWrite if ! SpecialFileLocations#Scratch#Write(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -count=0          -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxNew      if ! SpecialFileLocations#Scratch#Create(g:inboxFilenameTemplate, g:inboxDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxSave     if ! SpecialFileLocations#Scratch#Save(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang    -range=% -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxWrite    if ! SpecialFileLocations#Scratch#Write(g:inboxFilenameTemplate, g:inboxDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxClone    if ! SpecialFileLocations#Scratch#Clone(g:inboxFilenameTemplate, g:inboxDirspec, 0, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? -complete=customlist,SpecialFileLocations#Inbox#Complete InboxSClone   if ! SpecialFileLocations#Scratch#Clone(g:inboxFilenameTemplate, g:inboxDirspec, 1, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
 unlet! s:InboxCompleteFuncref
 
 
@@ -632,9 +692,11 @@ call ingo#plugin#cmdcomplete#dirforaction#setup('CloudSource', ingo#fs#path#Comb
 \   'browsefilter': '*.vim',
 \   'isIncludeSubdirs': 1,
 \})
-command! -bar -count=0          -nargs=? CloudNew   if ! SpecialFileLocations#Scratch#Create(g:cloudFilenameTemplate, g:cloudDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang             -nargs=? CloudSave  if ! SpecialFileLocations#Scratch#Save(g:cloudFilenameTemplate, g:cloudDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
-command! -bar -bang    -range=% -nargs=? CloudWrite if ! SpecialFileLocations#Scratch#Write(g:cloudFilenameTemplate, g:cloudDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -count=0          -nargs=? CloudNew       if ! SpecialFileLocations#Scratch#Create(g:cloudFilenameTemplate, g:cloudDirspec, <count>, ingo#compat#command#Mods('<mods>'), <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? CloudSave      if ! SpecialFileLocations#Scratch#Save(g:cloudFilenameTemplate, g:cloudDirspec, '<bang>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang    -range=% -nargs=? CloudWrite     if ! SpecialFileLocations#Scratch#Write(g:cloudFilenameTemplate, g:cloudDirspec, '<bang>', '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? CloudClone     if ! SpecialFileLocations#Scratch#Clone(g:cloudFilenameTemplate, g:cloudDirspec, 0, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
+command! -bar -bang             -nargs=? CloudSClone    if ! SpecialFileLocations#Scratch#Clone(g:cloudFilenameTemplate, g:cloudDirspec, 1, '<line1>,<line2>', <q-args>) | echoerr ingo#err#Get() | endif
 
 
 

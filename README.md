@@ -46,7 +46,14 @@ USAGE
                             contents.
     :CSave[!] [{file}]
     :[range]CWrite[!] [{file}]
-                            Persist buffer into one of the 'cdpath' directories.
+                            Persist the current buffer / specified lines into one
+                            of the 'cdpath' directories.
+    :[range]CClone [{file}]
+                            Duplicate and edit the current buffer / specified
+                            lines into one of the 'cdpath' directories.
+    :[range]CSClone [{file}]
+                            Duplicate and split the current buffer / specified
+                            lines into one of the 'cdpath' directories.
 
     :RootCd {dir}           Change the current directory to project {dir} ...
     :RootEdit {file}        Edit project {file} ...
@@ -66,7 +73,15 @@ USAGE
                             read contents.
     :RootSave[!] [{file}]
     :[range]RootWrite[!] [{file}]
-                            Persist buffer to the project root or one of its
+                            Persist the current buffer / specified lines to the
+                            project root or one of its subdirectories.
+    :[range]RootClone [{file}]
+                            Duplicate and edit the current buffer / specified
+                            lines to the project root or one of its
+                            subdirectories.
+    :[range]RootSClone [{file}]
+                            Duplicate and split the current buffer / specified
+                            lines to the project root or one of its
                             subdirectories.
 
     :TempCd {dir}           Change the current directory to {dir} ...
@@ -88,10 +103,18 @@ USAGE
                             contents.
     :TempSave[!] [{file}|N]
     :[range]TempWrite[!] [{file}|N]
-                            Persist buffer to the temp directory or one of its
+                            Persist the current buffer / specified lines to the
+                            temp directory or one of its subdirectories.
+    :[range]TempClone [{file}|N]
+                            Duplicate and edit the current buffer / specified
+                            lines to the temp directory or one of its
+                            subdirectories.
+    :[range]TempSClone [{file}|N]
+                            Duplicate and split the current buffer / specified
+                            lines to the temp directory or one of its
                             subdirectories.
 
-    :Testing Cd {dir}       Change the current directory to testing {dir} ...
+    :TestingCd {dir}        Change the current directory to testing {dir} ...
     :TestingEdit {file}     Edit testing {file} ...
     :Testingsplit {file}    Edit testing {file} in a split (above) buffer...
     :TestingSplit {file}    Edit testing {file} in a split (below) buffer...
@@ -101,7 +124,14 @@ USAGE
 
     :TestingSave[!] [{file}]
     :[range]TestingWrite[!] [{file}]
-                            Persist buffer as a testing file.
+                            Persist the current buffer / specified lines as a
+                            testing file.
+    :[range]TestingClone [{file}]
+                            Duplicate and edit the current buffer / specified
+                            lines as a testing file.
+    :[range]TestingSClone [{file}]
+                            Duplicate and split the current buffer / specified
+                            lines as a testing file.
 
     :TestingYank [{file}]   Yank the filespec of testing {file} into both default
                             register and the system clipboard.
@@ -140,17 +170,32 @@ USAGE
 
     :ScratchSave[!]  [{dir}|{filename} |{filespec} |N]
     :[range]ScratchWrite[!] [{dir}|{filename} |{filespec} |N]
-                            Persist a (scratch, or any) buffer to the default
-                            g:scratchDirspec, or passed {dir} (with the buffer's
-                            filename), or passed {filename} (in g:scratchDirspec,
-                            unless it's prepended with "./"), or passed {filespec}
-                            (if possible, inside g:scratchDirspec).
+                            Persist the current (scratch, or any) buffer /
+                            specified lines to the default g:scratchDirspec, or
+                            passed {dir} (with the buffer's filename), or passed
+                            {filename} (in g:scratchDirspec, unless it's prepended
+                            with "./"), or passed {filespec} (if possible, inside
+                            g:scratchDirspec).
                             :ScratchSave converts the scratch buffer to a "normal"
                             buffer, which can subsequently be saved via :w.
                             With :ScratchWrite, the scratch buffer keeps its
                             "scratchiness", and can be updated, toggled, ... with
                             the usual commands. Subsequent saves must be done with
                             :ScratchWrite, too.
+    :[range]ScratchClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and edit the current (scratch, or any)
+                            buffer / specified lines to the default
+                            g:scratchDirspec, or passed {dir} (with the buffer's
+                            filename), or passed {filename} (in g:scratchDirspec,
+                            unless it's prepended with "./"), or passed {filespec}
+                            (if possible, inside g:scratchDirspec).
+    :[range]ScratchSClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and split the current (scratch, or any)
+                            buffer / specified lines to the default
+                            g:scratchDirspec, or passed {dir} (with the buffer's
+                            filename), or passed {filename} (in g:scratchDirspec,
+                            unless it's prepended with "./"), or passed {filespec}
+                            (if possible, inside g:scratchDirspec).
 
     :ScratchIt              Turn the current buffer into a scratch buffer; that
                             means any edits need not be persisted when closing the
@@ -191,7 +236,22 @@ USAGE
 
     :USave[!]  [{dir}|{filename} |{filespec} |N]
     :[range]UWrite[!] [{dir}|{filename} |{filespec} |N]
-                            Persist a (Unixhome, or any) buffer to the default
+                            Persist the current (Unixhome, or any) buffer /
+                            specified lines to the default g:unixhomeDirspec, or
+                            passed {dir} (with the buffer's filename), or passed
+                            {filename} (in g:unixhomeDirspec, unless it's
+                            prepended with "./"), or passed {filespec} (if
+                            possible, inside g:unixhomeDirspec).
+    :[range]UClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and edit the current (Unixhome, or any)
+                            buffer / specified lines to the default
+                            g:unixhomeDirspec, or passed {dir} (with the buffer's
+                            filename), or passed {filename} (in g:unixhomeDirspec,
+                            unless it's prepended with "./"), or passed {filespec}
+                            (if possible, inside g:unixhomeDirspec).
+    :[range]USClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and split the current (Unixhome, or any)
+                            buffer / specified lines to the default
                             g:unixhomeDirspec, or passed {dir} (with the buffer's
                             filename), or passed {filename} (in g:unixhomeDirspec,
                             unless it's prepended with "./"), or passed {filespec}
@@ -241,11 +301,26 @@ USAGE
 
     :InboxSave[!]  [{dir}|{filename} |{filespec} |N]
     :[range]InboxWrite[!] [{dir}|{filename} |{filespec} |N]
-                            Persist a (inbox, or any) buffer to the default
-                            g:inboxDirspec, or passed {dir} (with the buffer's
-                            filename), or passed {filename} (in g:inboxDirspec,
-                            unless it's prepended with "./"), or passed {filespec}
-                            (if possible, inside g:inboxDirspec).
+                            Persist the current (inbox, or any) buffer / specified
+                            lines to the default g:inboxDirspec, or passed {dir}
+                            (with the buffer's filename), or passed {filename} (in
+                            g:inboxDirspec, unless it's prepended with "./"), or
+                            passed {filespec} (if possible, inside
+                            g:inboxDirspec).
+    :[range]InboxClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and edit the current (inbox, or any) buffer
+                            / specified lines to the default g:inboxDirspec, or
+                            passed {dir} (with the buffer's filename), or passed
+                            {filename} (in g:inboxDirspec, unless it's prepended
+                            with "./"), or passed {filespec} (if possible, inside
+                            g:inboxDirspec).
+    :[range]InboxSClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and split the current (inbox, or any) buffer
+                            / specified lines to the default g:inboxDirspec, or
+                            passed {dir} (with the buffer's filename), or passed
+                            {filename} (in g:inboxDirspec, unless it's prepended
+                            with "./"), or passed {filespec} (if possible, inside
+                            g:inboxDirspec).
 
     :CloudCd {dir}          Change the current directory to {dir} ...
     :CloudEdit {file}|N     Edit {file} (or the N'th newest file (subdirectories
@@ -272,11 +347,26 @@ USAGE
 
     :CloudSave[!]  [{dir}|{filename} |{filespec} |N]
     :[range]CloudWrite[!] [{dir}|{filename} |{filespec} |N]
-                            Persist a (cloud, or any) buffer to the default
-                            g:cloudDirspec, or passed {dir} (with the buffer's
-                            filename), or passed {filename} (in g:cloudDirspec,
-                            unless it's prepended with "./"), or passed {filespec}
-                            (if possible, inside g:cloudDirspec).
+                            Persist the current (cloud, or any) buffer / specified
+                            lines to the default g:cloudDirspec, or passed {dir}
+                            (with the buffer's filename), or passed {filename} (in
+                            g:cloudDirspec, unless it's prepended with "./"), or
+                            passed {filespec} (if possible, inside
+                            g:cloudDirspec).
+    :[range]CloudClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and edit the current (cloud, or any) buffer
+                            / specified lines to the default g:cloudDirspec, or
+                            passed {dir} (with the buffer's filename), or passed
+                            {filename} (in g:cloudDirspec, unless it's prepended
+                            with "./"), or passed {filespec} (if possible, inside
+                            g:cloudDirspec).
+    :[range]CloudSClone [{dir}|{filename} |{filespec} |N]
+                            Duplicate and split the current (cloud, or any) buffer
+                            / specified lines to the default g:cloudDirspec, or
+                            passed {dir} (with the buffer's filename), or passed
+                            {filename} (in g:cloudDirspec, unless it's prepended
+                            with "./"), or passed {filespec} (if possible, inside
+                            g:cloudDirspec).
 
     :Logbook [{logbook}]    Open a chronological logbook file (ft=logbook) to read
                             or append an entry.
@@ -325,6 +415,7 @@ To uninstall, use the :RmVimball command.
   version 1.00 or higher.
 - The :...Fragment commands require the Fragment.vim plugin (unreleased).
 - The :...Snip commands require the RangeSurround.vim plugin (unreleased).
+- The :...Clone commands require the clone.vim plugin ([vimscript #4896](http://www.vim.org/scripts/script.php?script_id=4896)).
 
 CONFIGURATION
 ------------------------------------------------------------------------------
@@ -374,7 +465,7 @@ First published version.
 - Started development.
 
 ------------------------------------------------------------------------------
-Copyright: (C) 2010-2024 Ingo Karkat -
+Copyright: (C) 2010-2026 Ingo Karkat -
 The [VIM LICENSE](http://vimdoc.sourceforge.net/htmldoc/uganda.html#license) applies to this plugin.
 
 Maintainer:     Ingo Karkat &lt;ingo@karkat.de&gt;

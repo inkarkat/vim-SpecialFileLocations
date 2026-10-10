@@ -3,7 +3,7 @@
 " DEPENDENCIES:
 "   - ingo-library.vim plugin
 "
-" Copyright: (C) 2017-2021 Ingo Karkat
+" Copyright: (C) 2017-2026 Ingo Karkat
 "   The VIM LICENSE applies to this script; see ':help copyright'.
 "
 " Maintainer:	Ingo Karkat <ingo@karkat.de>
@@ -65,6 +65,16 @@ function! SpecialFileLocations#Scratch#Write( scratchFilenameTemplate, scratchDi
 	    " don't want this for the :ScratchWrite command, so undo it.
 	    silent! keepalt 0file
 	endif
+	return 1
+    catch /^Vim\%((\a\+)\)\=:/
+	call ingo#err#SetVimException()
+	return 0
+    endtry
+endfunction
+function! SpecialFileLocations#Scratch#Clone( scratchFilenameTemplate, scratchDirspec, isSplit, range, filespec )
+    let l:filespec = SpecialFileLocations#Completions#NewestFileProcessing(a:scratchDirspec, a:filespec, '')[0]
+    try
+	execute 'keepalt' a:range . (a:isSplit ? 'S': '') . 'CloneAs' s:ScratchFilespec(a:scratchFilenameTemplate, a:scratchDirspec, expand('%:t'), l:filespec)
 	return 1
     catch /^Vim\%((\a\+)\)\=:/
 	call ingo#err#SetVimException()
