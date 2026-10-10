@@ -107,7 +107,7 @@ USAGE						  *SpecialFileLocations-usage*
 
 
     *:TestingCd* *:TestingEdit* *:Testingsplit* *:TestingSplit* *:TestingDrop*
-:Testing Cd {dir}	Change the current directory to testing {dir} ...
+:TestingCd {dir}	Change the current directory to testing {dir} ...
 :TestingEdit {file}	Edit testing {file} ...
 :Testingsplit {file}	Edit testing {file} in a split (above) buffer...
 :TestingSplit {file}	Edit testing {file} in a split (below) buffer...
@@ -414,7 +414,7 @@ Split off into separate plugin.
 Started development.
 
 ==============================================================================
-Copyright: (C) 2010-2024 Ingo Karkat
+Copyright: (C) 2010-2026 Ingo Karkat
 The VIM LICENSE applies to this plugin; see |copyright|.
 
 Maintainer:	Ingo Karkat <ingo@karkat.de>
